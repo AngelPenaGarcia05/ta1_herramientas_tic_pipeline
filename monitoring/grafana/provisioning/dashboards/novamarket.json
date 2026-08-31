@@ -1,0 +1,58 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "graphTooltip": 0,
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Memoria residente (bytes)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        { "expr": "nova_process_resident_memory_bytes", "legendFormat": "rss" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU acumulada (segundos)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        { "expr": "rate(nova_process_cpu_seconds_total[1m])", "legendFormat": "cpu/s" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Peticiones HTTP por ruta (rate 1m)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum by (route,status) (rate(nova_http_requests_total[1m]))",
+          "legendFormat": "{{route}} {{status}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Operaciones de negocio (total)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum by (operation,result) (nova_business_operations_total)",
+          "legendFormat": "{{operation}} {{result}}"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Uptime del proceso (s)",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 16 },
+      "targets": [
+        { "expr": "time() - nova_process_start_time_seconds" }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["novamarket"],
+  "time": { "from": "now-15m", "to": "now" },
+  "title": "NovaMarket - App",
+  "uid": "novamarket-app"
+}

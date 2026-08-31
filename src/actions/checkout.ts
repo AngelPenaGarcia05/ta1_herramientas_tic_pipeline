@@ -6,6 +6,7 @@ import { requireUser } from "@/lib/auth";
 import { checkoutSchema } from "@/lib/validations";
 import { createOrderFromCart, CheckoutError } from "@/lib/orders";
 import { StockError, ValidationError } from "@/lib/pricing";
+import { countBusinessOp } from "@/lib/observe";
 import { type ActionState, zodToFieldErrors } from "@/actions/types";
 
 export async function placeOrderAction(
@@ -20,6 +21,7 @@ export async function placeOrderAction(
     shipPhone: formData.get("shipPhone"),
   });
   if (!parsed.success) {
+    countBusinessOp("checkout", "rejected");
     return { ok: false, fieldErrors: zodToFieldErrors(parsed.error) };
   }
 
@@ -27,14 +29,17 @@ export async function placeOrderAction(
   try {
     const order = await createOrderFromCart(user.id, parsed.data);
     orderId = order.id;
+    countBusinessOp("checkout", "success");
   } catch (e) {
     if (
       e instanceof CheckoutError ||
       e instanceof StockError ||
       e instanceof ValidationError
     ) {
+      countBusinessOp("checkout", "rejected");
       return { ok: false, message: e.message };
     }
+    countBusinessOp("checkout", "error");
     throw e;
   }
 

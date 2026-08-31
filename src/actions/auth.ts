@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { hashPassword, verifyPassword } from "@/lib/password";
 import { startSession, endSession } from "@/lib/auth";
 import { loginSchema, registerSchema } from "@/lib/validations";
+import { countBusinessOp } from "@/lib/observe";
 import { type ActionState, zodToFieldErrors } from "@/actions/types";
 
 export async function registerAction(
@@ -49,6 +50,7 @@ export async function registerAction(
     name: user.name,
   });
 
+  countBusinessOp("register", "success");
   redirect("/catalogo");
 }
 
@@ -70,6 +72,7 @@ export async function loginAction(
 
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !(await verifyPassword(password, user.password))) {
+    countBusinessOp("login", "rejected");
     return { ok: false, message: "Correo o contrasena incorrectos." };
   }
 
@@ -79,6 +82,8 @@ export async function loginAction(
     email: user.email,
     name: user.name,
   });
+
+  countBusinessOp("login", "success");
 
   const safeCallback =
     callbackUrl.startsWith("/") && !callbackUrl.startsWith("//")

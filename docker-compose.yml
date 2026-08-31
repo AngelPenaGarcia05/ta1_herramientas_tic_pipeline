@@ -1,0 +1,63 @@
+# ============================================================
+# NovaMarket - Entorno local completo (app + PostgreSQL)
+#
+#   docker compose up --build
+#   -> app:  http://localhost:3000
+#   -> db:   localhost:5433  (usuario/clave/base: novamarket)
+#
+# El contenedor de PostgreSQL aplica db/schema.sql automaticamente la
+# primera vez que se crea (carpeta /docker-entrypoint-initdb.d/).
+# ============================================================
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: novamarket-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: novamarket
+      POSTGRES_PASSWORD: novamarket
+      POSTGRES_DB: novamarket
+    ports:
+      - "5433:5432" # 5433 en el host para no chocar con otros PostgreSQL
+    volumes:
+      - novamarket_db_data:/var/lib/postgresql/data
+      # Se ejecuta solo al inicializar el volumen por primera vez:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U novamarket -d novamarket"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: novamarket-app:local
+    container_name: novamarket-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Mismas variables que se usaran en produccion (Render)
+      DATABASE_URL: "postgresql://novamarket:novamarket@db:5432/novamarket?schema=public"
+      AUTH_SECRET: "local-dev-secret-cambialo-en-produccion-1234567890abcdef"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      NODE_ENV: "production"
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    # En local el esquema ya lo cargo PostgreSQL desde db/schema.sql,
+    # asi que arrancamos la app directamente (sin "prisma migrate deploy").
+    command: ["node", "server.js"]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  novamarket_db_data:

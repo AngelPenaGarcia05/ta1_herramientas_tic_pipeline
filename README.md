@@ -5,8 +5,9 @@ Plataforma de comercio electronico (tienda en linea) construida como aplicacion
 validacion de stock y totales en el servidor, area de cliente y un panel de
 administracion protegido por rol.
 
-> Esta es la **etapa 1**: el sistema base completamente funcional.
-> La arquitectura DevOps / CI-CD se implementara despues sobre esta base.
+El repositorio incluye ademas un **pipeline DevOps completo** (Docker, GitHub
+Actions CI/CD, SonarCloud, Terraform + Render, Prometheus + Grafana). Ver la
+seccion **[Arquitectura DevOps](#arquitectura-devops)** al final de este documento.
 
 ---
 
@@ -48,6 +49,9 @@ administracion protegido por rol.
   el middleware de Next.js
 - **Tailwind CSS** para la interfaz
 - **Vitest** para las pruebas
+- **DevOps**: Docker + docker-compose, GitHub Actions (CI/CD), SonarCloud
+  (calidad), Terraform + Render (infraestructura), Prometheus + Grafana +
+  `prom-client` (monitoreo). Ver la seccion **Arquitectura DevOps** al final.
 
 No hay backend separado: toda la logica vive dentro de Next.js.
 
@@ -180,6 +184,7 @@ npm run dev
 ```bash
 npm run test          # una sola corrida (Vitest)
 npm run test:watch    # modo watch
+npm run test:coverage # con cobertura -> coverage/lcov.info (lo usa SonarCloud)
 ```
 
 Las pruebas cubren la logica critica **sin depender de la base de datos**:
@@ -225,7 +230,22 @@ src/
     cart.ts              Vista y resumen del carrito
     validations.ts       Esquemas Zod
     rbac.ts              Reglas de acceso por rol (testeadas)
+    metrics.ts           Registro Prometheus (prom-client)
+    observe.ts           Helpers de instrumentacion (rutas y operaciones de negocio)
+  instrumentation.ts     Hook de arranque de Next: inicia las metricas
+  app/metrics/route.ts   GET /metrics  (formato Prometheus)
+  app/api/health/route.ts GET /api/health  (healthcheck)
   middleware.ts          Proteccion de rutas /admin y area de cliente
+
+# --- DevOps (ver seccion "Arquitectura DevOps") ---
+Dockerfile               Imagen de produccion multi-stage
+docker-entrypoint.sh     Arranque en produccion: migrate deploy + next start
+docker-compose.yml       App + PostgreSQL en local
+db/schema.sql            DDL generado desde Prisma
+sonar-project.properties Config de SonarCloud
+.github/workflows/ci-cd.yml  Pipeline (test+calidad -> build+push -> deploy)
+infra/                   Terraform (Render: Postgres + Web Service)
+monitoring/              Prometheus + Grafana (PoC local)
 ```
 
 ---
@@ -251,8 +271,237 @@ User     1 ── 1 Cart 1 ── N CartItem
 
 ## Notas
 
-- En esta etapa **no** se incluye configuracion de DevOps (GitHub Actions,
-  Docker, Kubernetes, Terraform, etc.). Se agregara sobre este sistema en la
-  siguiente etapa.
 - Nunca se guardan credenciales reales en el codigo: todo va por variables de
   entorno y `.env` esta en `.gitignore`.
+
+---
+
+# Arquitectura DevOps
+
+Esta seccion describe todo lo que rodea a la aplicacion para convertirla en un
+pipeline CI/CD completo, **100% en capa gratuita** (GitHub Actions, Docker Hub,
+SonarCloud, Render). La aplicacion en si no cambia salvo dos anadidos minimos:
+el endpoint `/metrics` (monitoreo) y el endpoint `/api/health` (healthcheck).
+
+## Piezas anadidas
+
+| Pieza | Archivo(s) | Para que sirve |
+|-------|-----------|----------------|
+| Contenedor de la app | `Dockerfile`, `docker-entrypoint.sh`, `.dockerignore` | Imagen de produccion multi-stage: `node:20-alpine` + build **standalone** de Next.js (solo lo necesario, sin dev deps) + CLI de Prisma para aplicar migraciones al arrancar (~600 MB) |
+| Entorno local completo | `docker-compose.yml` | App + PostgreSQL en local, esquema aplicado desde `db/schema.sql` |
+| Esquema SQL | `db/schema.sql` | DDL generado desde Prisma; lo carga Postgres al iniciar |
+| Calidad de codigo | `sonar-project.properties` | Config de SonarCloud (analiza `src/` y `tests/`, lee cobertura LCOV) |
+| Pipeline CI/CD | `.github/workflows/ci-cd.yml` | 3 jobs encadenados: test+calidad -> build+push -> deploy |
+| Infraestructura | `infra/*.tf` | Terraform con el provider oficial de Render (Postgres + Web Service) |
+| Monitoreo (PoC local) | `monitoring/` | Prometheus + Grafana sobre la misma imagen de la app |
+| Metricas en la app | `src/lib/metrics.ts`, `src/lib/observe.ts`, `src/instrumentation.ts`, `src/app/metrics/route.ts` | Endpoint `/metrics` en formato Prometheus |
+
+## Flujo completo del pipeline
+
+```
+                          push a rama main
+                                 |
+                                 v
+        +-------------------------------------------------+
+        | JOB (a)  test-and-quality        [GitHub Actions]|
+        |  - npm ci                                        |
+        |  - npm run lint                                  |
+        |  - npm run test:coverage   (Vitest -> lcov.info) |
+        |  - Analisis SonarCloud     (usa SONAR_TOKEN)     |
+        +-------------------------------------------------+
+                                 | needs: (a) OK
+                                 v
+        +-------------------------------------------------+
+        | JOB (b)  build-and-push          [GitHub Actions]|
+        |  - docker login  (DOCKERHUB_USERNAME/TOKEN)      |
+        |  - docker build -f Dockerfile                    |
+        |  - docker push  usuario/novamarket:latest        |
+        |  - docker push  usuario/novamarket:<git-sha>     |
+        +-------------------------------------------------+
+                                 | needs: (b) OK
+                                 v
+        +-------------------------------------------------+
+        | JOB (c)  deploy-infra            [GitHub Actions]|
+        |  - terraform init                               |
+        |  - terraform apply -auto-approve                |
+        |      * render_postgres    (plan free)          |
+        |      * render_web_service (imagen de Docker Hub)|
+        |      * inyecta DATABASE_URL en el web service    |
+        +-------------------------------------------------+
+                                 |
+                                 v
+                Render descarga la imagen y la publica en
+                https://novamarket.onrender.com
+```
+
+## Que pasa paso a paso cuando haces `git push` a `main`
+
+1. GitHub detecta el push y lanza el workflow `CI/CD NovaMarket`.
+2. **Job (a) test-and-quality**: instala dependencias, corre el linter, corre las
+   pruebas con cobertura (`vitest run --coverage`, genera `coverage/lcov.info`) y
+   envia el analisis a SonarCloud.
+3. Si (a) termina OK, arranca **Job (b) build-and-push**: hace login en Docker Hub,
+   construye la imagen con el `Dockerfile` y la publica con dos etiquetas:
+   `latest` y el SHA exacto del commit (para poder volver a una version concreta).
+4. Si (b) termina OK, arranca **Job (c) deploy-infra**: ejecuta
+   `terraform init` + `terraform apply`. Terraform habla con la API de Render y
+   crea/actualiza:
+   - una base de datos PostgreSQL (plan free),
+   - un web service que corre la imagen recien publicada en Docker Hub,
+   - con `DATABASE_URL` apuntando a la connection string interna de esa base.
+5. Render descarga la imagen, ejecuta `docker-entrypoint.sh`
+   (`prisma migrate deploy` -> `next start`) y expone la app en su URL publica.
+
+## Que ocurre si una prueba falla (fail-fast)
+
+Los 3 jobs estan encadenados con `needs:` en el workflow:
+
+```yaml
+build-and-push:   { needs: test-and-quality }
+deploy-infra:     { needs: build-and-push }
+```
+
+- Si **una prueba de Vitest falla**, el comando `npm run test:coverage` devuelve
+  codigo de salida != 0 -> el step falla -> el **job (a) falla**.
+- GitHub Actions marca como **skipped** los jobs (b) y (c) porque su `needs` no se
+  cumplio. **No se construye ninguna imagen y no se despliega nada.**
+- El pipeline aparece en rojo en GitHub y (si esta configurado) llega un correo.
+- Lo mismo aplica si falla el lint, si SonarCloud encuentra un *quality gate*
+  reprobado, o si `terraform apply` falla: el proceso se detiene en ese punto y
+  los pasos siguientes no se ejecutan. No hay logica manual: es el comportamiento
+  por defecto de `needs`.
+
+## Cuentas y credenciales que debes crear TU manualmente
+
+El pipeline NO funcionara hasta que crees estas cuentas (todas gratuitas, sin
+tarjeta) y cargues sus credenciales como **GitHub Secrets**. Este proyecto solo
+deja *placeholders*; no genera ningun valor real.
+
+| # | Cuenta | Donde | Que obtienes | Secret de GitHub |
+|---|--------|-------|--------------|------------------|
+| 1 | **GitHub** | github.com | El repo con Actions activado (gratis) | — |
+| 2 | **Docker Hub** | hub.docker.com | Usuario + un *Access Token* (Account Settings -> Personal access tokens -> Generate) | `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN` |
+| 3 | **SonarCloud** | sonarcloud.io (login con GitHub) | Crear organizacion + proyecto "NovaMarket" (analisis manual). Copiar `Project Key` y `Organization` a `sonar-project.properties`. Generar un token en *My Account -> Security* | `SONAR_TOKEN` |
+| 4 | **Render** | render.com (login con GitHub) | Una *API Key* en *Account Settings -> API Keys*. El *Owner ID* (empieza con `usr-` o `tea-`); se ve en la URL del dashboard o con `curl -H "Authorization: Bearer <API_KEY>" https://api.render.com/v1/owners` | `RENDER_API_KEY`, `RENDER_OWNER_ID` |
+
+> Nota: en `sonar-project.properties` debes reemplazar `sonar.projectKey` y
+> `sonar.organization` por los valores reales de tu proyecto de SonarCloud.
+
+## Donde y como cargar los GitHub Secrets
+
+En tu repositorio de GitHub:
+
+1. **Settings** (del repo) -> menu lateral **Secrets and variables** -> **Actions**.
+2. Boton **New repository secret**. Crea uno por cada fila:
+
+   | Name | Value |
+   |------|-------|
+   | `DOCKERHUB_USERNAME` | tu usuario de Docker Hub |
+   | `DOCKERHUB_TOKEN` | el access token de Docker Hub |
+   | `SONAR_TOKEN` | el token de SonarCloud |
+   | `RENDER_API_KEY` | la API key de Render |
+   | `RENDER_OWNER_ID` | tu owner id de Render (`usr-...` o `tea-...`) |
+
+3. No hace falta cargar nada mas: el workflow lee estos secrets con
+   `${{ secrets.NOMBRE }}` y los pasa a Terraform como variables `TF_VAR_*`.
+
+## Como probar TODO en local antes de hacer push
+
+### 1. Pruebas, lint y cobertura
+
+```bash
+npm ci
+npm run lint
+npm run test:coverage      # genera coverage/lcov.info
+```
+
+### 2. La imagen Docker y el entorno completo (app + PostgreSQL)
+
+```bash
+# Genera db/schema.sql desde el schema de Prisma (si lo cambiaste)
+npm run db:schema:sql
+
+# Levanta app + base de datos
+docker compose up --build
+
+# En otra terminal, comprueba:
+curl http://localhost:3000/api/health      # {"status":"ok",...}
+curl http://localhost:3000/metrics         # metricas Prometheus
+# App:  http://localhost:3000
+
+# (opcional) cargar datos de ejemplo desde el host contra la base del compose:
+DATABASE_URL="postgresql://novamarket:novamarket@localhost:5433/novamarket?schema=public" npm run db:seed
+
+docker compose down            # apagar
+docker compose down -v         # apagar y borrar la base
+```
+
+### 3. El stack de monitoreo (Prometheus + Grafana)
+
+```bash
+docker compose -f monitoring/docker-compose.monitoring.yml up --build
+
+#  App         -> http://localhost:3000
+#  Prometheus  -> http://localhost:9090   (Status -> Targets: "novamarket-app" UP)
+#  Grafana     -> http://localhost:3001   (admin / admin)
+#                 dashboard "NovaMarket - App" ya provisionado
+```
+
+Genera trafico (navega el catalogo, inicia sesion, agrega al carrito) y observa
+subir `nova_http_requests_total` y `nova_business_operations_total`.
+
+### 4. La infraestructura Terraform (solo validar, sin desplegar)
+
+```bash
+cd infra
+cp terraform.tfvars.example terraform.tfvars   # y completa tus valores
+
+terraform init
+terraform validate
+terraform plan        # muestra que recursos se crearian en Render
+```
+
+> `terraform plan` NO crea nada; solo lo hace `terraform apply` (que ejecuta el
+> pipeline). Si no tienes Terraform instalado puedes usar la imagen oficial:
+> `docker run --rm -v "$PWD:/w" -w /w hashicorp/terraform:1.9 init` (y `plan`).
+
+## Monitoreo: local vs produccion
+
+- **Local (PoC)**: el stack `monitoring/` levanta Prometheus + Grafana que hacen
+  scraping del endpoint `/metrics` de la app (metricas del proceso Node:
+  memoria, CPU, event loop, GC; contadores HTTP de los route handlers; y
+  contadores de negocio: registros, logins, items al carrito, pedidos).
+- **Produccion (Render)**: NO se despliega Prometheus/Grafana (consumiria los
+  recursos del plan free). El monitoreo de la app ya desplegada se hace con las
+  **metricas nativas gratuitas del dashboard de Render**: CPU, memoria, numero de
+  requests, tiempos de respuesta y logs en vivo, sin configuracion adicional.
+
+## Limitaciones de la capa gratuita (a tener en cuenta)
+
+- **Render web service (free)**: se duerme tras ~15 min sin trafico; la primera
+  peticion despues tarda ~30 s en responder (cold start).
+- **Render PostgreSQL (free)**: 1 GB, **una sola** por cuenta y **expira a los
+  30 dias**. Si ya tienes una, borra la anterior antes del `terraform apply`.
+- **`plan = "free"` del web service**: el provider de Render lo acepta aunque su
+  documentacion liste solo planes de pago. Si una version futura lo rechazara,
+  se cambia por el plan mas barato en `infra/main.tf`.
+- **Estado de Terraform**: en este PoC se guarda en la cache de GitHub Actions.
+  Si se borra la cache, el siguiente `apply` intentara **crear** recursos que ya
+  existen y fallara; la solucion real es un backend remoto (Terraform Cloud es
+  gratis).
+- **SonarCloud**: el analisis solo corre si configuras `projectKey`/`organization`
+  reales en `sonar-project.properties` y el secret `SONAR_TOKEN`.
+
+## Resumen para la sustentacion (5 min)
+
+1. **Problema**: integracion, pruebas y despliegue manuales; ambientes
+   inconsistentes; nada detiene el proceso si una prueba falla.
+2. **Solucion**: un push a `main` dispara un pipeline de 3 etapas encadenadas.
+3. **Contenedores**: `Dockerfile` multi-stage -> imagen identica en local y en
+   Render (adios "en mi maquina si funciona").
+4. **Fail-fast**: `needs:` entre jobs -> si las pruebas fallan, no se construye
+   imagen ni se despliega.
+5. **IaC**: Terraform describe la infraestructura de Render en codigo y la
+   recrea igual siempre.
+6. **Monitoreo**: `/metrics` + Prometheus/Grafana en local; metricas nativas de
+   Render en produccion.

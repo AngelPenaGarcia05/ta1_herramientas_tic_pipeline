@@ -1,0 +1,16 @@
+# ============================================================
+# Copia este archivo como terraform.tfvars y completa los valores.
+# NO subas terraform.tfvars al repositorio (esta en .gitignore).
+#
+# En el pipeline de GitHub Actions estos valores llegan como
+# variables de entorno TF_VAR_* desde los GitHub Secrets.
+# ============================================================
+
+render_api_key     = "rnd_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+render_owner_id    = "tea-XXXXXXXXXXXXXXXXXXXX" # o usr-XXXXXXXXXXXXXXXXXXXX
+dockerhub_username = "TU_USUARIO_DOCKERHUB"
+
+# Opcionales (tienen valor por defecto):
+# image_tag    = "latest"
+# service_name = "novamarket"
+# region       = "oregon"

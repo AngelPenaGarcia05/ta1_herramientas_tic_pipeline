@@ -1,0 +1,8 @@
+# Terraform - archivos locales (no versionar)
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+crash.log
+*.tfplan

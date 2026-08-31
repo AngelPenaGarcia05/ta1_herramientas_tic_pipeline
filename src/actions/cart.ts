@@ -6,6 +6,7 @@ import { requireUser } from "@/lib/auth";
 import { getOrCreateCart } from "@/lib/cart";
 import { addToCartSchema, updateCartItemSchema } from "@/lib/validations";
 import { assertStockAvailable } from "@/lib/pricing";
+import { countBusinessOp } from "@/lib/observe";
 import { type ActionState } from "@/actions/types";
 
 export async function addToCartAction(
@@ -45,6 +46,7 @@ export async function addToCartAction(
       },
     ]);
   } catch (e) {
+    countBusinessOp("cart_add", "rejected");
     return { ok: false, message: (e as Error).message };
   }
 
@@ -56,6 +58,7 @@ export async function addToCartAction(
 
   revalidatePath("/carrito");
   revalidatePath("/", "layout");
+  countBusinessOp("cart_add", "success");
   return { ok: true, message: `"${product.name}" agregado al carrito.` };
 }
 

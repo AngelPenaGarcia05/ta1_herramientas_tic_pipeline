@@ -1,0 +1,19 @@
+# ============================================================
+# Configuracion de Prometheus para NovaMarket (PoC local)
+# Hace scraping del endpoint /metrics que expone la app.
+# ============================================================
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "novamarket-app"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["app:3000"]
+        labels:
+          service: novamarket
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

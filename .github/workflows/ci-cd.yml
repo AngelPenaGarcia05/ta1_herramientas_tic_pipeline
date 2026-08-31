@@ -1,0 +1,130 @@
+name: CI/CD NovaMarket
+
+# Se ejecuta en cada push a main. Los jobs estan ENCADENADOS con "needs":
+# si un job falla, los siguientes NO se ejecutan (fail-fast automatico).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+env:
+  IMAGE_NAME: novamarket
+
+jobs:
+  # ----------------------------------------------------------
+  # (a) Pruebas + calidad de codigo
+  # ----------------------------------------------------------
+  test-and-quality:
+    name: Tests y SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # SonarCloud necesita el historial completo
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Pruebas + cobertura
+        run: npm run test:coverage
+
+      - name: Analisis SonarCloud
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+
+  # ----------------------------------------------------------
+  # (b) Build de la imagen Docker + push a Docker Hub
+  #     Solo corre si (a) pasa.
+  # ----------------------------------------------------------
+  build-and-push:
+    name: Build y push a Docker Hub
+    runs-on: ubuntu-latest
+    needs: test-and-quality
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login en Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Calcular tags de la imagen
+        id: meta
+        run: |
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}"
+          echo "image=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "IMAGE=${IMAGE}" >> "$GITHUB_ENV"
+
+      - name: Build y push (latest + SHA del commit)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ----------------------------------------------------------
+  # (c) Infraestructura como codigo (Terraform -> Render)
+  #     Solo corre si (b) pasa.
+  # ----------------------------------------------------------
+  deploy-infra:
+    name: Terraform apply (Render)
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    defaults:
+      run:
+        working-directory: infra
+    env:
+      # Variables que consume Terraform (variables.tf).
+      TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
+      TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
+      TF_VAR_dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      TF_VAR_image_tag: ${{ github.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache del estado de Terraform
+        # PoC academico: el estado se guarda en la cache de Actions entre
+        # ejecuciones. La clave cambia en cada run (la cache de Actions es
+        # inmutable) y restore-keys recupera el estado del run anterior.
+        # Para produccion real se usaria un backend remoto (Terraform Cloud, S3).
+        uses: actions/cache@v4
+        with:
+          path: infra/terraform.tfstate
+          key: novamarket-tfstate-${{ github.run_id }}
+          restore-keys: |
+            novamarket-tfstate-
+
+      - name: Configurar Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: terraform init
+        run: terraform init -input=false
+
+      - name: terraform apply
+        run: terraform apply -input=false -auto-approve
+
+      - name: Mostrar URL publica del servicio
+        run: terraform output -raw web_service_url || true

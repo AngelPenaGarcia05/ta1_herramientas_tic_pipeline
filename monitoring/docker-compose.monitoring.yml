@@ -1,0 +1,72 @@
+# ============================================================
+# NovaMarket - Stack de monitoreo LOCAL (prueba de concepto)
+#
+#   docker compose -f monitoring/docker-compose.monitoring.yml up --build
+#
+#   app         -> http://localhost:3000   (misma imagen que produccion)
+#   /metrics    -> http://localhost:3000/metrics
+#   Prometheus  -> http://localhost:9090
+#   Grafana     -> http://localhost:3001   (admin / admin)
+#
+# El monitoreo de la app YA DESPLEGADA en Render se observa con las
+# metricas nativas gratuitas del dashboard de Render (CPU, memoria,
+# requests, logs). Este stack es solo para demostrar el flujo localmente.
+# ============================================================
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: novamarket
+      POSTGRES_PASSWORD: novamarket
+      POSTGRES_DB: novamarket
+    volumes:
+      - ../db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - novamarket_mon_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U novamarket -d novamarket"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: novamarket-app:local
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://novamarket:novamarket@db:5432/novamarket?schema=public"
+      AUTH_SECRET: "local-monitoring-secret-0123456789abcdef0123456789abcdef"
+      NODE_ENV: "production"
+      PORT: "3000"
+    command: ["node", "server.js"]
+    ports:
+      - "3000:3000"
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    depends_on:
+      - app
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3001:3000"
+
+volumes:
+  novamarket_mon_db:

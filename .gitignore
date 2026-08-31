@@ -20,3 +20,12 @@ coverage/
 
 next-env.d.ts
 *.tsbuildinfo
+
+# DevOps / local
+.postgres-data/
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.*
+infra/terraform.tfvars
+*.tfplan
+.scannerwork/
