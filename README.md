@@ -384,8 +384,26 @@ deja *placeholders*; no genera ningun valor real.
 | 3 | **SonarCloud** | sonarcloud.io (login con GitHub) | Crear organizacion + proyecto "NovaMarket" (analisis manual). Copiar `Project Key` y `Organization` a `sonar-project.properties`. Generar un token en *My Account -> Security* | `SONAR_TOKEN` |
 | 4 | **Render** | render.com (login con GitHub) | Una *API Key* en *Account Settings -> API Keys*. El *Owner ID* (empieza con `usr-` o `tea-`); se ve en la URL del dashboard o con `curl -H "Authorization: Bearer <API_KEY>" https://api.render.com/v1/owners` | `RENDER_API_KEY`, `RENDER_OWNER_ID` |
 
-> Nota: en `sonar-project.properties` debes reemplazar `sonar.projectKey` y
-> `sonar.organization` por los valores reales de tu proyecto de SonarCloud.
+### Configurar SonarCloud paso a paso
+
+1. Entra a **sonarcloud.io** con tu cuenta de GitHub.
+2. **+ -> Analyze new project** -> elige el repo `ta1_herramientas_tic_pipeline`.
+   Si te pide crear una **organizacion**, creala (plan gratis "Free").
+3. En **Analysis Method** elige **"With GitHub Actions"** (NO "Automatic Analysis";
+   este proyecto ya trae su propio paso de analisis en el workflow).
+   - Si SonarCloud activo *Automatic Analysis*, desactivalo en
+     *Project -> Administration -> Analysis Method*, o el pipeline fallara con
+     "you are running manual analysis while Automatic Analysis is enabled".
+4. Copia el **Project Key** y el **Organization Key** que te muestra y ponlos en
+   `sonar-project.properties` (reemplaza `CAMBIAR_project_key` y
+   `CAMBIAR_organization`). Normalmente son algo como
+   `tu-usuario_ta1_herramientas_tic_pipeline` y `tu-usuario`.
+5. Genera un token en **My Account -> Security -> Generate Tokens** y guardalo
+   como el secret `SONAR_TOKEN` en GitHub.
+
+> Mientras no exista el secret `SONAR_TOKEN`, el paso de SonarCloud se **omite**
+> automaticamente (aparece un warning) y el pipeline continua. En cuanto lo
+> configures, el analisis se ejecuta en cada push.
 
 ## Donde y como cargar los GitHub Secrets
 

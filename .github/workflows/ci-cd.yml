@@ -23,6 +23,17 @@ jobs:
         with:
           fetch-depth: 0 # SonarCloud necesita el historial completo
 
+      - name: Detectar si SonarCloud esta configurado
+        id: sonarcheck
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          if [ -n "$SONAR_TOKEN" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Configurar Node.js 20
         uses: actions/setup-node@v4
         with:
@@ -38,11 +49,20 @@ jobs:
       - name: Pruebas + cobertura
         run: npm run test:coverage
 
+      # El analisis solo corre si ya configuraste SonarCloud (secret SONAR_TOKEN
+      # + projectKey/organization reales en sonar-project.properties).
+      # Mientras tanto el pipeline sigue: los jobs (b) y (c) dependen de este job,
+      # no de este paso.
       - name: Analisis SonarCloud
+        if: steps.sonarcheck.outputs.enabled == 'true'
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
+
+      - name: SonarCloud omitido
+        if: steps.sonarcheck.outputs.enabled != 'true'
+        run: echo "::warning::SonarCloud no configurado (falta el secret SONAR_TOKEN). Paso omitido."
 
   # ----------------------------------------------------------
   # (b) Build de la imagen Docker + push a Docker Hub
