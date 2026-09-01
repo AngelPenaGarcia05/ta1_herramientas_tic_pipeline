@@ -76,13 +76,6 @@ resource "render_web_service" "app" {
   }
 
   lifecycle {
-    ignore_changes = [
-      maintenance_mode,
-      notification_override,
-      previews,
-      pull_request_previews_enabled,
-      root_directory,
-      slug,
-    ]
+    ignore_changes = all
   }
 }
