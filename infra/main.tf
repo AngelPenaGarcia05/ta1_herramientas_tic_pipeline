@@ -53,8 +53,11 @@ resource "render_web_service" "app" {
   runtime_source = {
     image = {
       image_url = "docker.io/${var.dockerhub_username}/novamarket"
-      # El pipeline pasa el SHA del commit (TF_VAR_image_tag) -> imagen inmutable.
-      tag = var.image_tag
+      # Terraform solo crea el servicio. El deploy de cada version lo hace el
+      # pipeline via la API de Render (POST /deploys con imageUrl = :<sha>),
+      # porque el provider no puede ACTUALIZAR un web_service en plan free
+      # (bug maintenance_mode). Ver .github/workflows/ci-cd.yml -> deploy-infra.
+      tag = "latest"
     }
   }
 
@@ -77,16 +80,11 @@ resource "render_web_service" "app" {
   }
 
   lifecycle {
-    # Se ignoran atributos computados/no soportados en el plan free que el
-    # provider marca como drift en cada plan. El "tag" de la imagen SI se
-    # gestiona (para poder actualizar el deploy en cada push).
-    ignore_changes = [
-      maintenance_mode,
-      notification_override,
-      previews,
-      pull_request_previews_enabled,
-      root_directory,
-      slug,
-    ]
+    # El provider render-oss/render envia `maintenance_mode` en cualquier UPDATE
+    # de render_web_service y la API de Render lo rechaza en plan free
+    # (issue render-oss/terraform-provider-render#80). Con ignore_changes = all
+    # Terraform nunca intenta un update: crea el servicio una vez y no lo toca.
+    # Los redeploys los dispara el pipeline por la API de Render.
+    ignore_changes = all
   }
 }

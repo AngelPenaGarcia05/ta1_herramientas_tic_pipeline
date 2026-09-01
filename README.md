@@ -322,16 +322,17 @@ el endpoint `/metrics` (monitoreo) y el endpoint `/api/health` (healthcheck).
                                  v
         +-------------------------------------------------+
         | JOB (c)  deploy-infra            [GitHub Actions]|
-        |  - terraform init                               |
-        |  - terraform apply -auto-approve                |
+        |  - terraform init + apply  (PROVISIONA, no-op    |
+        |      si ya existe):                              |
         |      * render_postgres    (plan free)          |
-        |      * render_web_service (imagen de Docker Hub)|
-        |      * inyecta DATABASE_URL en el web service    |
+        |      * render_web_service (imagen de Docker Hub) |
+        |  - POST api.render.com/v1/services/<id>/deploys  |
+        |      { imageUrl: usuario/novamarket:<git-sha> }  |
         +-------------------------------------------------+
                                  |
                                  v
-                Render descarga la imagen y la publica en
-                https://novamarket.onrender.com
+                Render descarga esa imagen y la publica en
+                https://novamarket-zgv9.onrender.com
 ```
 
 ## Que pasa paso a paso cuando haces `git push` a `main`
@@ -343,13 +344,16 @@ el endpoint `/metrics` (monitoreo) y el endpoint `/api/health` (healthcheck).
 3. Si (a) termina OK, arranca **Job (b) build-and-push**: hace login en Docker Hub,
    construye la imagen con el `Dockerfile` y la publica con dos etiquetas:
    `latest` y el SHA exacto del commit (para poder volver a una version concreta).
-4. Si (b) termina OK, arranca **Job (c) deploy-infra**: ejecuta
-   `terraform init` + `terraform apply`. Terraform habla con la API de Render y
-   crea/actualiza:
-   - una base de datos PostgreSQL (plan free),
-   - un web service que corre la imagen recien publicada en Docker Hub,
-   - con `DATABASE_URL` apuntando a la connection string interna de esa base.
-5. Render descarga la imagen, ejecuta `docker-entrypoint.sh`
+4. Si (b) termina OK, arranca **Job (c) deploy-infra**:
+   - `terraform init` + `terraform apply`: **provisiona** (una sola vez) la base de
+     datos PostgreSQL (plan free) y el web service, con `DATABASE_URL` apuntando a la
+     connection string interna de la base. En runs siguientes es un no-op
+     (`ignore_changes = all`: el provider de Render no puede *actualizar* un web
+     service en plan free por un bug con `maintenance_mode`).
+   - Luego llama a la **API de Render** (`POST /v1/services/<id>/deploys`) indicando
+     `imageUrl = usuario/novamarket:<git-sha>` para desplegar exactamente la imagen
+     de ese commit, sin tocar el recurso de Terraform.
+5. Render descarga esa imagen, ejecuta `docker-entrypoint.sh`
    (`prisma migrate deploy` -> `next start`) y expone la app en su URL publica.
 
 ## Que ocurre si una prueba falla (fail-fast)
@@ -382,7 +386,7 @@ deja *placeholders*; no genera ningun valor real.
 | 1 | **GitHub** | github.com | El repo con Actions activado (gratis) | — |
 | 2 | **Docker Hub** | hub.docker.com | Usuario + un *Access Token* (Account Settings -> Personal access tokens -> Generate) | `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN` |
 | 3 | **SonarCloud** | sonarcloud.io (login con GitHub) | Crear organizacion + proyecto "NovaMarket" (analisis manual). Copiar `Project Key` y `Organization` a `sonar-project.properties`. Generar un token en *My Account -> Security* | `SONAR_TOKEN` |
-| 4 | **Render** | render.com (login con GitHub) | Una *API Key* en *Account Settings -> API Keys*. El *Owner ID* (empieza con `usr-` o `tea-`); se ve en la URL del dashboard o con `curl -H "Authorization: Bearer <API_KEY>" https://api.render.com/v1/owners`. Tras el primer deploy: el *Deploy Hook* del servicio (*servicio -> Settings -> Deploy Hook*), una URL que al hacerle POST fuerza a Render a re-descargar la imagen | `RENDER_API_KEY`, `RENDER_OWNER_ID`, `RENDER_DEPLOY_HOOK` |
+| 4 | **Render** | render.com (login con GitHub) | Una *API Key* en *Account Settings -> API Keys*. El *Owner ID* (empieza con `usr-` o `tea-`); se ve en la URL del dashboard o con `curl -H "Authorization: Bearer <API_KEY>" https://api.render.com/v1/owners` | `RENDER_API_KEY`, `RENDER_OWNER_ID` |
 
 ### Configurar SonarCloud paso a paso
 
@@ -419,13 +423,14 @@ En tu repositorio de GitHub:
    | `SONAR_TOKEN` | el token de SonarCloud |
    | `RENDER_API_KEY` | la API key de Render |
    | `RENDER_OWNER_ID` | tu owner id de Render (`usr-...` o `tea-...`) |
-   | `RENDER_DEPLOY_HOOK` | la URL del Deploy Hook del servicio web (Render -> servicio -> Settings -> Deploy Hook). Solo existe despues del primer deploy; al principio ponla vacia y actualizala luego |
 
 3. No hace falta cargar nada mas: el workflow lee estos secrets con
    `${{ secrets.NOMBRE }}` y los pasa a Terraform como variables `TF_VAR_*`.
-   El job `deploy-infra` termina haciendo `POST` a `RENDER_DEPLOY_HOOK` para que
-   Render re-descargue la imagen `:latest` recien publicada (si el secret esta
-   vacio, ese `curl` simplemente no hace nada).
+   El job `deploy-infra` primero corre `terraform apply` (crea el servicio + la base
+   la primera vez; luego es no-op) y despues llama a la **API de Render**
+   (`POST /v1/services/<id>/deploys` con `imageUrl` = la imagen del commit, `:<sha>`)
+   usando `RENDER_API_KEY`. Terraform no actualiza el servicio porque el provider
+   `render-oss/render` no lo permite en plan free (bug con `maintenance_mode`).
 
 ## Como probar TODO en local antes de hacer push
 

@@ -127,8 +127,7 @@ jobs:
       TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
       TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
       TF_VAR_dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
-      # Imagen inmutable: el servicio de Render queda apuntando al SHA del commit.
-      TF_VAR_image_tag: ${{ github.sha }}
+      TF_VAR_image_tag: latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -153,21 +152,29 @@ jobs:
       - name: terraform init
         run: terraform init -input=false
 
+      # Terraform solo CREA el servicio + la base (idempotente: no-op si ya existen).
+      # No puede ACTUALIZAR render_web_service en plan free (bug del provider con
+      # maintenance_mode), por eso el servicio tiene lifecycle{ignore_changes=all}.
       - name: terraform apply
         run: terraform apply -input=false -auto-approve
 
       - name: Mostrar URL publica del servicio
         run: terraform output -raw web_service_url || true
 
-      # Fuerza a Render a re-descargar la imagen :latest recien publicada.
-      # Con lifecycle{ignore_changes=all} en el servicio, este hook es lo unico
-      # que actualiza la app cuando cambia la imagen.
-      - name: Disparar redeploy en Render (Deploy Hook)
+      # El deploy de cada version se hace por la API de Render, indicando la imagen
+      # EXACTA del commit (:<sha>). Asi no se toca el recurso de Terraform.
+      - name: Desplegar la imagen del commit en Render
         env:
-          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          if [ -z "$HOOK" ]; then
-            echo "::warning::RENDER_DEPLOY_HOOK no configurado; Render no hara redeploy automatico."
-            exit 0
-          fi
-          curl -fsS -X POST "$HOOK" && echo "Redeploy solicitado a Render."
+          set -e
+          SERVICE_ID="$(terraform output -raw web_service_id)"
+          IMAGE="docker.io/${DOCKERHUB_USERNAME}/novamarket:${GITHUB_SHA}"
+          echo "Desplegando ${IMAGE} en ${SERVICE_ID} ..."
+          curl -fsS -X POST "https://api.render.com/v1/services/${SERVICE_ID}/deploys" \
+            -H "Authorization: Bearer ${RENDER_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{\"imageUrl\":\"${IMAGE}\"}"
+          echo
+          echo "Deploy solicitado a Render."
