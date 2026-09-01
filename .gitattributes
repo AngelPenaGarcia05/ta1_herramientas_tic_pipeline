@@ -1,0 +1,7 @@
+# Scripts que se ejecutan dentro de contenedores Linux: forzar fin de linea LF
+# (evita el error "/bin/sh^M: bad interpreter" al hacer checkout en Windows).
+*.sh            text eol=lf
+docker-entrypoint.sh text eol=lf
+Dockerfile      text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf

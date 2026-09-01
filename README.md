@@ -287,7 +287,7 @@ el endpoint `/metrics` (monitoreo) y el endpoint `/api/health` (healthcheck).
 
 | Pieza | Archivo(s) | Para que sirve |
 |-------|-----------|----------------|
-| Contenedor de la app | `Dockerfile`, `docker-entrypoint.sh`, `.dockerignore` | Imagen de produccion multi-stage: `node:20-alpine` + build **standalone** de Next.js (solo lo necesario, sin dev deps) + CLI de Prisma para aplicar migraciones al arrancar (~600 MB) |
+| Contenedor de la app | `Dockerfile`, `docker-entrypoint.sh`, `.dockerignore` | Imagen de produccion multi-stage: `node:20-alpine` + build de Next.js + `node_modules` **completo de produccion** (`npm prune --omit=dev`) para que el CLI de Prisma pueda ejecutar `migrate deploy` al arrancar |
 | Entorno local completo | `docker-compose.yml` | App + PostgreSQL en local, esquema aplicado desde `db/schema.sql` |
 | Esquema SQL | `db/schema.sql` | DDL generado desde Prisma; lo carga Postgres al iniciar |
 | Calidad de codigo | `sonar-project.properties` | Config de SonarCloud (analiza `src/` y `tests/`, lee cobertura LCOV) |

@@ -1,6 +1,6 @@
 # ============================================================
 # NovaMarket - Imagen de produccion (multi-stage)
-# App: Next.js 15 (App Router, output: standalone) + Prisma
+# App: Next.js 15 (App Router) + Prisma
 # ============================================================
 
 # ---------- Stage 1: dependencias completas + build ----------
@@ -27,10 +27,20 @@ RUN --mount=type=cache,target=/root/.npm \
 COPY . .
 
 # Compila Next.js (el script build ya corre "prisma generate").
-# Genera .next/standalone con solo lo necesario para ejecutar la app.
-RUN npm run build
+# Se elimina .next/cache: es cache de compilacion, no se usa en runtime.
+RUN npm run build && rm -rf .next/cache
 
-# ---------- Stage 2: runner (imagen final liviana) ----------
+# ---------- Stage 2: node_modules SOLO de produccion ----------
+# Se parte del builder (todo instalado + cliente Prisma ya generado) y se PODAN
+# las devDependencies. El arbol de node_modules queda COMPLETO y con sus
+# symlinks intactos: asi el CLI de Prisma dispone de TODAS sus dependencias
+# (@prisma/config, effect, etc.) y de sus archivos WASM para "migrate deploy".
+FROM builder AS prod-deps
+RUN npm prune --omit=dev \
+  # Alpine usa musl: el binario SWC de glibc no se usa nunca (ahorra ~135 MB)
+  && rm -rf node_modules/@next/swc-linux-x64-gnu
+
+# ---------- Stage 3: runner (imagen final) ----------
 FROM node:20-alpine AS runner
 WORKDIR /app
 
@@ -39,20 +49,21 @@ RUN apk add --no-cache libc6-compat openssl
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
-ENV HOSTNAME=0.0.0.0
 
+# Usuario no root. Se crea su HOME para caches de Prisma/Next.
 RUN addgroup --system --gid 1001 nodejs \
-  && adduser --system --uid 1001 nextjs
+  && adduser --system --uid 1001 --home /home/nextjs nextjs \
+  && mkdir -p /home/nextjs && chown -R nextjs:nodejs /home/nextjs
+ENV HOME=/home/nextjs
 
-# --- App (build standalone: server.js + node_modules minimo trazado) ---
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+# --- node_modules de produccion COMPLETO ---
+COPY --from=prod-deps /app/node_modules ./node_modules
+# --- Artefactos de la app (build de Next + estaticos) ---
+COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-
-# --- Prisma: CLI + engines + schema/migraciones para "migrate deploy" ---
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
+COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/package.json ./package.json
+# --- Esquema + migraciones (los usa "prisma migrate deploy" al arrancar) ---
 COPY --from=builder /app/prisma ./prisma
 
 COPY --chmod=755 docker-entrypoint.sh ./docker-entrypoint.sh
