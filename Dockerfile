@@ -66,6 +66,13 @@ COPY --from=builder /app/package.json ./package.json
 # --- Esquema + migraciones (los usa "prisma migrate deploy" al arrancar) ---
 COPY --from=builder /app/prisma ./prisma
 
+# Verificacion: si el CLI de Prisma, su motor WASM o una dep transitiva no
+# quedaron completos, el BUILD falla aqui (nunca se publica una imagen que
+# no pueda ejecutar "prisma migrate deploy").
+RUN node ./node_modules/prisma/build/index.js -v \
+  && node -e "require.resolve('effect')" \
+  && test -f node_modules/prisma/build/prisma_schema_build_bg.wasm
+
 COPY --chmod=755 docker-entrypoint.sh ./docker-entrypoint.sh
 
 USER nextjs

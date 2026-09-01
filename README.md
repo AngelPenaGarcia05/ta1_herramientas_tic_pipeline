@@ -382,7 +382,7 @@ deja *placeholders*; no genera ningun valor real.
 | 1 | **GitHub** | github.com | El repo con Actions activado (gratis) | — |
 | 2 | **Docker Hub** | hub.docker.com | Usuario + un *Access Token* (Account Settings -> Personal access tokens -> Generate) | `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN` |
 | 3 | **SonarCloud** | sonarcloud.io (login con GitHub) | Crear organizacion + proyecto "NovaMarket" (analisis manual). Copiar `Project Key` y `Organization` a `sonar-project.properties`. Generar un token en *My Account -> Security* | `SONAR_TOKEN` |
-| 4 | **Render** | render.com (login con GitHub) | Una *API Key* en *Account Settings -> API Keys*. El *Owner ID* (empieza con `usr-` o `tea-`); se ve en la URL del dashboard o con `curl -H "Authorization: Bearer <API_KEY>" https://api.render.com/v1/owners` | `RENDER_API_KEY`, `RENDER_OWNER_ID` |
+| 4 | **Render** | render.com (login con GitHub) | Una *API Key* en *Account Settings -> API Keys*. El *Owner ID* (empieza con `usr-` o `tea-`); se ve en la URL del dashboard o con `curl -H "Authorization: Bearer <API_KEY>" https://api.render.com/v1/owners`. Tras el primer deploy: el *Deploy Hook* del servicio (*servicio -> Settings -> Deploy Hook*), una URL que al hacerle POST fuerza a Render a re-descargar la imagen | `RENDER_API_KEY`, `RENDER_OWNER_ID`, `RENDER_DEPLOY_HOOK` |
 
 ### Configurar SonarCloud paso a paso
 
@@ -419,9 +419,13 @@ En tu repositorio de GitHub:
    | `SONAR_TOKEN` | el token de SonarCloud |
    | `RENDER_API_KEY` | la API key de Render |
    | `RENDER_OWNER_ID` | tu owner id de Render (`usr-...` o `tea-...`) |
+   | `RENDER_DEPLOY_HOOK` | la URL del Deploy Hook del servicio web (Render -> servicio -> Settings -> Deploy Hook). Solo existe despues del primer deploy; al principio ponla vacia y actualizala luego |
 
 3. No hace falta cargar nada mas: el workflow lee estos secrets con
    `${{ secrets.NOMBRE }}` y los pasa a Terraform como variables `TF_VAR_*`.
+   El job `deploy-infra` termina haciendo `POST` a `RENDER_DEPLOY_HOOK` para que
+   Render re-descargue la imagen `:latest` recien publicada (si el secret esta
+   vacio, ese `curl` simplemente no hace nada).
 
 ## Como probar TODO en local antes de hacer push
 
