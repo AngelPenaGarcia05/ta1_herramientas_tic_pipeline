@@ -11,7 +11,7 @@ set -e
 # ============================================================
 
 echo "==> Aplicando migraciones de base de datos (prisma migrate deploy)..."
-node_modules/.bin/prisma migrate deploy
+node ./node_modules/prisma/build/index.js migrate deploy
 
 echo "==> Iniciando NovaMarket en el puerto ${PORT:-3000}..."
 exec node_modules/.bin/next start -p "${PORT:-3000}"
