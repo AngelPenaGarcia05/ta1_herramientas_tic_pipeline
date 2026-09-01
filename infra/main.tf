@@ -53,7 +53,8 @@ resource "render_web_service" "app" {
   runtime_source = {
     image = {
       image_url = "docker.io/${var.dockerhub_username}/novamarket"
-      tag       = "latest"
+      # El pipeline pasa el SHA del commit (TF_VAR_image_tag) -> imagen inmutable.
+      tag = var.image_tag
     }
   }
 
@@ -76,6 +77,16 @@ resource "render_web_service" "app" {
   }
 
   lifecycle {
-    ignore_changes = all
+    # Se ignoran atributos computados/no soportados en el plan free que el
+    # provider marca como drift en cada plan. El "tag" de la imagen SI se
+    # gestiona (para poder actualizar el deploy en cada push).
+    ignore_changes = [
+      maintenance_mode,
+      notification_override,
+      previews,
+      pull_request_previews_enabled,
+      root_directory,
+      slug,
+    ]
   }
 }

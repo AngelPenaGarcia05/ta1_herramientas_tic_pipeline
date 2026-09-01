@@ -127,7 +127,8 @@ jobs:
       TF_VAR_render_api_key: ${{ secrets.RENDER_API_KEY }}
       TF_VAR_render_owner_id: ${{ secrets.RENDER_OWNER_ID }}
       TF_VAR_dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
-      TF_VAR_image_tag: latest
+      # Imagen inmutable: el servicio de Render queda apuntando al SHA del commit.
+      TF_VAR_image_tag: ${{ github.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
