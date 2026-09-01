@@ -1,4 +1,3 @@
-# ============================================================
 # NovaMarket - Infraestructura en Render (Terraform)
 #
 #   render_postgres    -> base de datos PostgreSQL (plan free)
