@@ -53,7 +53,7 @@ resource "render_web_service" "app" {
   runtime_source = {
     image = {
       image_url = "docker.io/${var.dockerhub_username}/novamarket"
-      tag       = var.image_tag
+      tag       = "latest"
     }
   }
 
@@ -74,7 +74,7 @@ resource "render_web_service" "app" {
       value = "https://${var.service_name}.onrender.com"
     }
   }
-  
+
   lifecycle {
     ignore_changes = [
       maintenance_mode,
