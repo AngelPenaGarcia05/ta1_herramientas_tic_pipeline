@@ -1,0 +1,7 @@
+# PENDIENTE: provoca un fallo real de Vitest en una rama (por ejemplo, rompe
+# a proposito una asercion de tests/pricing.test.ts) y pega aqui el log
+# completo del step "Pruebas + cobertura" del job "Tests y SonarCloud" en
+# GitHub Actions.
+# Borra estas lineas de comentario antes de guardar el log real.
+# Mientras este archivo empiece con "# PENDIENTE:", ejecutar_casos.py y la
+# interfaz de Streamlit lo van a saltar automaticamente (no truena, solo avisa).

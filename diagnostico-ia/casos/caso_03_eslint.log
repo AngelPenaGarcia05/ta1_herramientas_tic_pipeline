@@ -1,0 +1,6 @@
+# PENDIENTE: provoca un fallo real de ESLint en una rama (por ejemplo,
+# declara una variable sin usarla en algun .ts/.tsx) y pega aqui el log
+# completo del step "Lint" del job "Tests y SonarCloud" en GitHub Actions.
+# Borra estas lineas de comentario antes de guardar el log real.
+# Mientras este archivo empiece con "# PENDIENTE:", ejecutar_casos.py y la
+# interfaz de Streamlit lo van a saltar automaticamente (no truena, solo avisa).

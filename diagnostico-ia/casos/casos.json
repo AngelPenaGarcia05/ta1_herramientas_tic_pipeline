@@ -1,0 +1,38 @@
+[
+  {
+    "id": "caso_01_terraform_free_tier",
+    "archivo": "caso_01_terraform_free_tier.log",
+    "descripcion": "terraform apply falla en Render por el bug de maintenance_mode en plan free (runs #8/#9 del historial real)",
+    "esperado": { "estado": "FALLO", "etapa": "TERRAFORM" }
+  },
+  {
+    "id": "caso_02_render_imagen_sha",
+    "archivo": "caso_02_render_imagen_sha.log",
+    "descripcion": "Render corriendo una imagen vieja / tag de SHA desactualizado: el contenedor crashea en 'prisma migrate deploy' porque esa imagen tenia el CLI de Prisma roto",
+    "esperado": { "estado": "FALLO", "etapa": "MIGRATION" }
+  },
+  {
+    "id": "caso_03_eslint",
+    "archivo": "caso_03_eslint.log",
+    "descripcion": "Fallo del paso Lint (ESLint) en el job test-and-quality",
+    "esperado": { "estado": "FALLO", "etapa": "LINT" }
+  },
+  {
+    "id": "caso_04_vitest",
+    "archivo": "caso_04_vitest.log",
+    "descripcion": "Fallo del paso Pruebas + cobertura (Vitest) en el job test-and-quality",
+    "esperado": { "estado": "FALLO", "etapa": "TEST" }
+  },
+  {
+    "id": "caso_05_exitoso",
+    "archivo": "caso_05_exitoso.log",
+    "descripcion": "Ejecucion exitosa de punta a punta, sin fallos (run #14)",
+    "esperado": { "estado": "SIN_FALLO", "etapa": "SIN_FALLO" }
+  },
+  {
+    "id": "caso_06_log_corto_sin_contexto",
+    "archivo": "caso_06_log_corto_sin_contexto.log",
+    "descripcion": "Log de solo 3 lineas, sin contexto suficiente para diagnosticar",
+    "esperado": { "estado": "INDETERMINADO", "etapa": "INDETERMINADO" }
+  }
+]

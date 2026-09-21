@@ -1,0 +1,92 @@
+{
+  "id": "caso_06_log_corto_sin_contexto",
+  "descripcion": "Log de solo 3 lineas, sin contexto suficiente para diagnosticar",
+  "esperado": {
+    "estado": "INDETERMINADO",
+    "etapa": "INDETERMINADO"
+  },
+  "version_prompt": "v2",
+  "error": null,
+  "intentos": 1,
+  "generado_localmente": false,
+  "fue_recortado_el_log": false,
+  "conteo_secretos": {},
+  "log_redactado": "Run started\nStep 4/12\nWaiting for runner...\n",
+  "respuesta_cruda": "{\n  \"estado\": \"INDETERMINADO\",\n  \"etapa\": \"INDETERMINADO\",\n  \"categoria_causa\": \"DESCONOCIDA\",\n  \"causa_probable\": \"El log proporcionado es demasiado corto y no contiene mensajes de error ni de éxito que permitan identificar la etapa o la causa del fallo.\",\n  \"evidencia\": [\n    \"Run started\",\n    \"Step 4/12\",\n    \"Waiting for runner...\"\n  ],\n  \"severidad\": \"BAJA\",\n  \"acciones_sugeridas\": [\n    \"Obtener el log completo del pipeline, incluyendo todos los pasos de los jobs.\",\n    \"Revisar los mensajes de salida de cada job (Tests y SonarCloud, Build y push, Terraform apply, Deploy en Render).\",\n    \"Buscar cualquier línea que indique \\\"error\\\", \\\"failed\\\" o códigos de salida diferentes a 0.\",\n    \"Verificar que los artefactos (imagen Docker, estado de Terraform) se hayan creado correctamente.\",\n    \"Si el fallo ocurre en Render, revisar también los logs de despliegue y healthcheck de Render.\"\n  ],\n  \"reintento_seguro\": null,\n  \"confianza\": \"BAJA\",\n  \"informacion_faltante\": [\n    \"Log completo del job que falló o finalizó.\",\n    \"Mensajes de error o códigos de salida de los pasos críticos.\",\n    \"Salida de los comandos de migración Prisma y healthcheck de Render.\"\n  ],\n  \"fuera_de_alcance\": false\n}",
+  "formato_valido": true,
+  "chequeos": [
+    {
+      "nombre": "json_valido",
+      "paso": true,
+      "detalle": "El texto es un objeto JSON valido"
+    },
+    {
+      "nombre": "campos_completos",
+      "paso": true,
+      "detalle": "Todos los campos presentes"
+    },
+    {
+      "nombre": "tipos_correctos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "enums_validos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "coherencia_sin_fallo",
+      "paso": true,
+      "detalle": "No aplica (estado != SIN_FALLO)"
+    },
+    {
+      "nombre": "coherencia_indeterminado",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "evidencia_literal",
+      "paso": true,
+      "detalle": "Toda la evidencia aparece en el log"
+    },
+    {
+      "nombre": "sin_acciones_prohibidas",
+      "paso": true,
+      "detalle": "Ninguna accion prohibida"
+    },
+    {
+      "nombre": "sin_secretos_en_la_respuesta",
+      "paso": true,
+      "detalle": "OK"
+    }
+  ],
+  "datos": {
+    "estado": "INDETERMINADO",
+    "etapa": "INDETERMINADO",
+    "categoria_causa": "DESCONOCIDA",
+    "causa_probable": "El log proporcionado es demasiado corto y no contiene mensajes de error ni de éxito que permitan identificar la etapa o la causa del fallo.",
+    "evidencia": [
+      "Run started",
+      "Step 4/12",
+      "Waiting for runner..."
+    ],
+    "severidad": "BAJA",
+    "acciones_sugeridas": [
+      "Obtener el log completo del pipeline, incluyendo todos los pasos de los jobs.",
+      "Revisar los mensajes de salida de cada job (Tests y SonarCloud, Build y push, Terraform apply, Deploy en Render).",
+      "Buscar cualquier línea que indique \"error\", \"failed\" o códigos de salida diferentes a 0.",
+      "Verificar que los artefactos (imagen Docker, estado de Terraform) se hayan creado correctamente.",
+      "Si el fallo ocurre en Render, revisar también los logs de despliegue y healthcheck de Render."
+    ],
+    "reintento_seguro": null,
+    "confianza": "BAJA",
+    "informacion_faltante": [
+      "Log completo del job que falló o finalizó.",
+      "Mensajes de error o códigos de salida de los pasos críticos.",
+      "Salida de los comandos de migración Prisma y healthcheck de Render."
+    ],
+    "fuera_de_alcance": false
+  },
+  "coincide_con_esperado": true
+}

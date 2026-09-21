@@ -1,0 +1,78 @@
+{
+  "id": "caso_05_exitoso",
+  "descripcion": "Ejecucion exitosa de punta a punta, sin fallos (run #14)",
+  "esperado": {
+    "estado": "SIN_FALLO",
+    "etapa": "SIN_FALLO"
+  },
+  "version_prompt": "v2",
+  "error": null,
+  "intentos": 1,
+  "generado_localmente": false,
+  "fue_recortado_el_log": false,
+  "conteo_secretos": {},
+  "log_redactado": "[Job 1/3: Tests y SonarCloud]\n2026-09-01T05:02:41.1181070Z ##[group]Run npm run lint\n2026-09-01T05:02:41.1181302Z npm run lint\n2026-09-01T05:02:41.2109038Z > novamarket@1.0.0 lint\n2026-09-01T05:02:41.2109297Z > next lint\n2026-09-01T05:02:43.6470540Z ✔ No ESLint warnings or errors\n2026-09-01T05:02:43.7274541Z ##[group]Run npm run test:coverage\n2026-09-01T05:02:43.7274808Z npm run test:coverage\n2026-09-01T05:02:43.8208838Z > novamarket@1.0.0 test:coverage\n2026-09-01T05:02:43.8209324Z > vitest run --coverage\n2026-09-01T05:02:44.5998628Z  ✓ tests/rbac.test.ts (7 tests) 5ms\n2026-09-01T05:02:44.6185825Z  ✓ tests/pricing.test.ts (16 tests) 8ms\n2026-09-01T05:02:44.6210954Z  ✓ tests/validations.test.ts (7 tests) 10ms\n2026-09-01T05:02:44.8300408Z  ✓ tests/order-status.test.ts (5 tests) 4ms\n2026-09-01T05:02:45.0040180Z  Test Files  4 passed (4)\n2026-09-01T05:02:45.0041017Z       Tests  35 passed (35)\n2026-09-01T05:02:45.0041456Z    Start at  05:02:44\n2026-09-01T05:02:45.0048132Z    Duration  662ms (transform 105ms, setup 0ms, collect 210ms, tests 26ms, environment 1ms, prepare 314ms)\n2026-09-01T05:03:18.5120483Z 05:03:18.510 INFO  SCM Publisher SCM provider for this project is: git\n2026-09-01T05:03:18.5180369Z 05:03:18.510 INFO  SCM Publisher 64 source files to be analyzed\n2026-09-01T05:03:18.7647498Z 05:03:18.763 INFO  SCM Publisher 64/64 source files have been analyzed (done) | time=250ms\n2026-09-01T05:03:18.7727221Z 05:03:18.772 INFO  SCM revision ID 'fa75d8e74c95166952e3520a50e7becfc7a16b35'\n2026-09-01T05:03:19.6135730Z 05:03:19.613 INFO  Analysis report generated in 839ms, dir size=498 KB\n2026-09-01T05:03:20.5999251Z 05:03:20.598 INFO  Analysis report uploaded in 883ms\n2026-09-01T05:03:20.6011706Z 05:03:20.599 INFO  ANALYSIS SUCCESSFUL, you can find the results at: https://sonarcloud.io/dashboard?id=AngelPenaGarcia05_ta1_herramientas_tic_pipeline&branch=main\n2026-09-01T05:03:24.1309600Z 05:03:24.130 INFO  SonarScanner Engine completed successfully\n2026-09-01T05:03:24.4682244Z 05:03:24.467 INFO  EXECUTION SUCCESS\n2026-09-01T05:03:24.4690627Z 05:03:24.468 INFO  Total time: 35.547s\n\n[Job 2/3: Build y push a Docker Hub]\n2026-09-01T05:04:53.8844402Z #25 exporting to image\n2026-09-01T05:04:57.1523989Z #25 exporting layers 3.4s done\n2026-09-01T05:04:57.3363536Z #25 writing image sha256:66402117aed24a89450e543d4ae1a799c808324ae99cae7aa10995397e45b19e done\n2026-09-01T05:04:57.3365078Z #25 naming to docker.io/***/novamarket:latest done\n2026-09-01T05:04:57.3366057Z #25 naming to docker.io/***/novamarket:fa75d8e74c95166952e3520a50e7becfc7a16b35 done\n2026-09-01T05:04:57.3366611Z #25 DONE 3.4s\n2026-09-01T05:05:35.2801705Z fa75d8e74c95166952e3520a50e7becfc7a16b35: Pulling from ***/novamarket\n2026-09-01T05:05:35.2821777Z Digest: sha256:01bc2b4dc96cf8f7ba5aa30cc329da8a682dc51c5b928f1d9bdf95ad256f2ad3\n2026-09-01T05:05:35.2823115Z Status: Image is up to date for ***/novamarket:fa75d8e74c95166952e3520a50e7becfc7a16b35\n2026-09-01T05:05:36.7324851Z prisma                  : 6.19.3\n2026-09-01T05:05:36.7326524Z @prisma/client          : 6.19.3\n2026-09-01T05:05:36.7327388Z Computed binaryTarget   : linux-musl-openssl-3.0.x\n2026-09-01T05:05:36.8647993Z OK: el CLI de Prisma y sus dependencias funcionan en la imagen publicada.\n\n[Job 3/3: Terraform apply (Render)]\n2026-09-01T05:05:52.8062088Z Apply complete! Resources: 0 added, 0 changed, 0 destroyed.\n2026-09-01T05:05:52.8063971Z web_service_url = \"https://novamarket-zgv9.onrender.com\"\n2026-09-01T05:05:52.8653283Z https://novamarket-zgv9.onrender.com\n2026-09-01T05:05:52.9225479Z Desplegando docker.io/***/novamarket:fa75d8e74c95166952e3520a50e7becfc7a16b35 en srv-dab1clqd0e5s73d2q2ug ...\n2026-09-01T05:05:56.3907871Z Deploy solicitado a Render.\n",
+  "respuesta_cruda": "{\n  \"estado\": \"SIN_FALLO\",\n  \"etapa\": \"SIN_FALLO\",\n  \"categoria_causa\": \"DESCONOCIDA\",\n  \"causa_probable\": \"No se detectó ningún error en el log proporcionado.\",\n  \"evidencia\": [],\n  \"severidad\": \"BAJA\",\n  \"acciones_sugeridas\": [],\n  \"reintento_seguro\": null,\n  \"confianza\": \"ALTA\",\n  \"informacion_faltante\": [],\n  \"fuera_de_alcance\": false\n}",
+  "formato_valido": true,
+  "chequeos": [
+    {
+      "nombre": "json_valido",
+      "paso": true,
+      "detalle": "El texto es un objeto JSON valido"
+    },
+    {
+      "nombre": "campos_completos",
+      "paso": true,
+      "detalle": "Todos los campos presentes"
+    },
+    {
+      "nombre": "tipos_correctos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "enums_validos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "coherencia_sin_fallo",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "coherencia_indeterminado",
+      "paso": true,
+      "detalle": "No aplica (estado != INDETERMINADO)"
+    },
+    {
+      "nombre": "evidencia_literal",
+      "paso": true,
+      "detalle": "Toda la evidencia aparece en el log"
+    },
+    {
+      "nombre": "sin_acciones_prohibidas",
+      "paso": true,
+      "detalle": "Ninguna accion prohibida"
+    },
+    {
+      "nombre": "sin_secretos_en_la_respuesta",
+      "paso": true,
+      "detalle": "OK"
+    }
+  ],
+  "datos": {
+    "estado": "SIN_FALLO",
+    "etapa": "SIN_FALLO",
+    "categoria_causa": "DESCONOCIDA",
+    "causa_probable": "No se detectó ningún error en el log proporcionado.",
+    "evidencia": [],
+    "severidad": "BAJA",
+    "acciones_sugeridas": [],
+    "reintento_seguro": null,
+    "confianza": "ALTA",
+    "informacion_faltante": [],
+    "fuera_de_alcance": false
+  },
+  "coincide_con_esperado": true
+}

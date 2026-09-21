@@ -1,0 +1,90 @@
+{
+  "id": "caso_01_terraform_free_tier",
+  "descripcion": "terraform apply falla en Render por el bug de maintenance_mode en plan free (runs #8/#9 del historial real)",
+  "esperado": {
+    "estado": "FALLO",
+    "etapa": "TERRAFORM"
+  },
+  "version_prompt": "v2",
+  "error": null,
+  "intentos": 1,
+  "generado_localmente": false,
+  "fue_recortado_el_log": false,
+  "conteo_secretos": {
+    "credencial_por_nombre": 1
+  },
+  "log_redactado": "Run terraform apply -input=false -auto-approve\nrandom_password.auth_secret: [REDACTADO:credencial_por_nombre] state... [id=none]\nrender_postgres.db: Refreshing state... [id=dpg-dab1c52d0e5s73d2os60-a]\nrender_web_service.app: Refreshing state... [id=srv-dab1clqd0e5s73d2q2ug]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  ~ update in-place\n\nTerraform will perform the following actions:\n\n  # render_web_service.app will be updated in-place\n  ~ resource \"render_web_service\" \"app\" {\n      + active_custom_domains         = (known after apply)\n        id                            = \"srv-dab1clqd0e5s73d2q2ug\"\n      + log_stream_override           = (known after apply)\n      + max_shutdown_delay_seconds    = (known after apply)\n        name                          = \"novamarket\"\n      + num_instances                 = (known after apply)\n      ~ runtime_source                = {\n          ~ image = {\n              + digest    = (known after apply)\n              ~ tag       = \"490992347f351da65a81ac9b93effb2ffab73f92\" -> \"c173a65e8d961296fae09c4577905d683fb071a1\"\n                # (1 unchanged attribute hidden)\n            }\n        }\n        # (11 unchanged attributes hidden)\n    }\n\nPlan: 0 to add, 1 to change, 0 to destroy.\nrender_web_service.app: Modifying... [id=srv-dab1clqd0e5s73d2q2ug]\n\nWarning: Redundant ignore_changes element\n\n  on main.tf line 48, in resource \"render_web_service\" \"app\":\n  48: resource \"render_web_service\" \"app\" {\n\nAdding an attribute name to ignore_changes tells Terraform to ignore future\nchanges to the argument in configuration after the object has been created,\nretaining the value originally configured.\n\nThe attribute slug is decided by the provider alone and therefore there can\nbe no configured value to compare with. Including this attribute in\nignore_changes has no effect. Remove the attribute from ignore_changes to\nquiet this warning.\n\nError: Error updating service\n\n  with render_web_service.app,\n  on main.tf line 48, in resource \"render_web_service\" \"app\":\n  48: resource \"render_web_service\" \"app\" {\n\nCould not update service, unexpected error: could not update service:\nmaintenance mode can only be configured for non-free tier services\n",
+  "respuesta_cruda": "{\n  \"estado\": \"FALLO\",\n  \"etapa\": \"TERRAFORM\",\n  \"categoria_causa\": \"CONFIGURACION\",\n  \"causa_probable\": \"Se intentó habilitar maintenance mode en un servicio de tier gratuito, lo cual no está permitido por Render\",\n  \"evidencia\": [\n    \"Error: Error updating service\",\n    \"maintenance mode can only be configured for non-free tier services\",\n    \"render_web_service.app will be updated in-place\"\n  ],\n  \"severidad\": \"ALTA\",\n  \"acciones_sugeridas\": [\n    \"Eliminar la configuración de maintenance mode del recurso render_web_service en main.tf\",\n    \"Verificar que el servicio Render esté en un plan de pago si se necesita maintenance mode\",\n    \"Ejecutar terraform plan localmente para confirmar que no haya más cambios no soportados\",\n    \"Actualizar la documentación del proyecto indicando la restricción de maintenance mode en tier gratuito\",\n    \"Re‑ejecutar el pipeline después de aplicar los cambios de configuración\"\n  ],\n  \"reintento_seguro\": false,\n  \"confianza\": \"ALTA\",\n  \"informacion_faltante\": [],\n  \"fuera_de_alcance\": false\n}",
+  "formato_valido": true,
+  "chequeos": [
+    {
+      "nombre": "json_valido",
+      "paso": true,
+      "detalle": "El texto es un objeto JSON valido"
+    },
+    {
+      "nombre": "campos_completos",
+      "paso": true,
+      "detalle": "Todos los campos presentes"
+    },
+    {
+      "nombre": "tipos_correctos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "enums_validos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "coherencia_sin_fallo",
+      "paso": true,
+      "detalle": "No aplica (estado != SIN_FALLO)"
+    },
+    {
+      "nombre": "coherencia_indeterminado",
+      "paso": true,
+      "detalle": "No aplica (estado != INDETERMINADO)"
+    },
+    {
+      "nombre": "evidencia_literal",
+      "paso": true,
+      "detalle": "Toda la evidencia aparece en el log"
+    },
+    {
+      "nombre": "sin_acciones_prohibidas",
+      "paso": true,
+      "detalle": "Ninguna accion prohibida"
+    },
+    {
+      "nombre": "sin_secretos_en_la_respuesta",
+      "paso": true,
+      "detalle": "OK"
+    }
+  ],
+  "datos": {
+    "estado": "FALLO",
+    "etapa": "TERRAFORM",
+    "categoria_causa": "CONFIGURACION",
+    "causa_probable": "Se intentó habilitar maintenance mode en un servicio de tier gratuito, lo cual no está permitido por Render",
+    "evidencia": [
+      "Error: Error updating service",
+      "maintenance mode can only be configured for non-free tier services",
+      "render_web_service.app will be updated in-place"
+    ],
+    "severidad": "ALTA",
+    "acciones_sugeridas": [
+      "Eliminar la configuración de maintenance mode del recurso render_web_service en main.tf",
+      "Verificar que el servicio Render esté en un plan de pago si se necesita maintenance mode",
+      "Ejecutar terraform plan localmente para confirmar que no haya más cambios no soportados",
+      "Actualizar la documentación del proyecto indicando la restricción de maintenance mode en tier gratuito",
+      "Re‑ejecutar el pipeline después de aplicar los cambios de configuración"
+    ],
+    "reintento_seguro": false,
+    "confianza": "ALTA",
+    "informacion_faltante": [],
+    "fuera_de_alcance": false
+  },
+  "coincide_con_esperado": true
+}

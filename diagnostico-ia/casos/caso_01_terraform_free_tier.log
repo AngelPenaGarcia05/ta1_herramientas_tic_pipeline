@@ -1,0 +1,54 @@
+Run terraform apply -input=false -auto-approve
+random_password.auth_secret: Refreshing state... [id=none]
+render_postgres.db: Refreshing state... [id=dpg-dab1c52d0e5s73d2os60-a]
+render_web_service.app: Refreshing state... [id=srv-dab1clqd0e5s73d2q2ug]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # render_web_service.app will be updated in-place
+  ~ resource "render_web_service" "app" {
+      + active_custom_domains         = (known after apply)
+        id                            = "srv-dab1clqd0e5s73d2q2ug"
+      + log_stream_override           = (known after apply)
+      + max_shutdown_delay_seconds    = (known after apply)
+        name                          = "novamarket"
+      + num_instances                 = (known after apply)
+      ~ runtime_source                = {
+          ~ image = {
+              + digest    = (known after apply)
+              ~ tag       = "490992347f351da65a81ac9b93effb2ffab73f92" -> "c173a65e8d961296fae09c4577905d683fb071a1"
+                # (1 unchanged attribute hidden)
+            }
+        }
+        # (11 unchanged attributes hidden)
+    }
+
+Plan: 0 to add, 1 to change, 0 to destroy.
+render_web_service.app: Modifying... [id=srv-dab1clqd0e5s73d2q2ug]
+
+Warning: Redundant ignore_changes element
+
+  on main.tf line 48, in resource "render_web_service" "app":
+  48: resource "render_web_service" "app" {
+
+Adding an attribute name to ignore_changes tells Terraform to ignore future
+changes to the argument in configuration after the object has been created,
+retaining the value originally configured.
+
+The attribute slug is decided by the provider alone and therefore there can
+be no configured value to compare with. Including this attribute in
+ignore_changes has no effect. Remove the attribute from ignore_changes to
+quiet this warning.
+
+Error: Error updating service
+
+  with render_web_service.app,
+  on main.tf line 48, in resource "render_web_service" "app":
+  48: resource "render_web_service" "app" {
+
+Could not update service, unexpected error: could not update service:
+maintenance mode can only be configured for non-free tier services

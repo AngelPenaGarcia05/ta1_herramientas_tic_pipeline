@@ -27,7 +27,7 @@ provider "render" {
   owner_id = var.render_owner_id
 }
 
-# AUTH_SECRET generado automaticamente (no hay que gestionarlo a mano).
+
 resource "random_password" "auth_secret" {
   length  = 48
   special = false

@@ -6,6 +6,20 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
+    },
+    {
+      "name": "diagnostico-ia",
+      "runtimeExecutable": "C:\\Users\\USUARIO\\Documents\\UTP\\Herramientas de Desarrollo Profesional TIC\\proyecto_ta1\\diagnostico-ia\\.venv\\Scripts\\python.exe",
+      "runtimeArgs": [
+        "-m",
+        "streamlit",
+        "run",
+        "C:\\Users\\USUARIO\\Documents\\UTP\\Herramientas de Desarrollo Profesional TIC\\proyecto_ta1\\diagnostico-ia\\app.py",
+        "--server.headless=true",
+        "--browser.gatherUsageStats=false",
+        "--server.port=8501"
+      ],
+      "port": 8501
     }
   ]
 }

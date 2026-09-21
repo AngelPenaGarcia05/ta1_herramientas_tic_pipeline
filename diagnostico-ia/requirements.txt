@@ -1,0 +1,10 @@
+# FASE 1 (nucleo sin IA)
+pytest>=8.0,<9
+
+# FASE 2 (cliente del modelo)
+# Proveedor: Groq (gratis). Si se cambia de proveedor, solo se toca llm_client.py.
+groq>=1.0,<2.0
+python-dotenv>=1.0,<2.0
+
+# FASE 3 (interfaz)
+streamlit>=1.38,<2.0
