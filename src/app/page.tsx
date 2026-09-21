@@ -85,4 +85,4 @@ export default async function HomePage() {
     </div>
   );
 }
-const variableSinUsar = 123;
+const variableRota = ;
