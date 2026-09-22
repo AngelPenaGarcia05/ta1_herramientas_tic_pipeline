@@ -1,7 +1,287 @@
-# PENDIENTE: provoca un fallo real de Vitest en una rama (por ejemplo, rompe
-# a proposito una asercion de tests/pricing.test.ts) y pega aqui el log
-# completo del step "Pruebas + cobertura" del job "Tests y SonarCloud" en
-# GitHub Actions.
-# Borra estas lineas de comentario antes de guardar el log real.
-# Mientras este archivo empiece con "# PENDIENTE:", ejecutar_casos.py y la
-# interfaz de Streamlit lo van a saltar automaticamente (no truena, solo avisa).
+2026-09-22T00:53:28.2860033Z Current runner version: '2.337.0'
+2026-09-22T00:53:28.2881607Z ##[group]Runner Image Provisioner
+2026-09-22T00:53:28.2882363Z Hosted Compute Agent
+2026-09-22T00:53:28.2882866Z Version: 20260828.587
+2026-09-22T00:53:28.2883424Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-22T00:53:28.2884104Z Build Date: 2026-08-28T16:44:25Z
+2026-09-22T00:53:28.2884671Z Worker ID: {abdc115b-25b2-4190-9998-bf5a3679e289}
+2026-09-22T00:53:28.2885288Z Azure Region: westus3
+2026-09-22T00:53:28.2886075Z ##[endgroup]
+2026-09-22T00:53:28.2887262Z ##[group]Operating System
+2026-09-22T00:53:28.2887889Z Ubuntu
+2026-09-22T00:53:28.2888332Z 24.04.5
+2026-09-22T00:53:28.2888793Z LTS
+2026-09-22T00:53:28.2889245Z ##[endgroup]
+2026-09-22T00:53:28.2889743Z ##[group]Runner Image
+2026-09-22T00:53:28.2890289Z Image: ubuntu-24.04
+2026-09-22T00:53:28.2890762Z Version: 20260907.300.1
+2026-09-22T00:53:28.2891849Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-22T00:53:28.2893139Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+2026-09-22T00:53:28.2894008Z ##[endgroup]
+2026-09-22T00:53:28.2894973Z ##[group]GITHUB_TOKEN Permissions
+2026-09-22T00:53:28.2896911Z Contents: read
+2026-09-22T00:53:28.2897444Z Metadata: read
+2026-09-22T00:53:28.2898243Z Packages: read
+2026-09-22T00:53:28.2898722Z ##[endgroup]
+2026-09-22T00:53:28.2900493Z Secret source: Actions
+2026-09-22T00:53:28.2901423Z Cache mode: write
+2026-09-22T00:53:28.2902158Z Prepare workflow directory
+2026-09-22T00:53:28.3210170Z Prepare all required actions
+2026-09-22T00:53:28.3254369Z Getting action download info
+2026-09-22T00:53:28.6268265Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-09-22T00:53:28.7387627Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-09-22T00:53:28.8727019Z Download action repository 'SonarSource/sonarqube-scan-action@v4' (SHA:689fb39b34b9aa95ebc5f8f119343ddd51542402)
+2026-09-22T00:53:29.2942508Z Getting action download info
+2026-09-22T00:53:29.4117274Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2026-09-22T00:53:29.5733666Z Complete job name: Tests y SonarCloud
+2026-09-22T00:53:29.6484014Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-09-22T00:53:29.6492994Z ##[group]Run actions/checkout@v4
+2026-09-22T00:53:29.6493966Z with:
+2026-09-22T00:53:29.6494617Z   fetch-depth: 0
+2026-09-22T00:53:29.6495696Z   repository: AngelPenaGarcia05/ta1_herramientas_tic_pipeline
+2026-09-22T00:53:29.6502961Z   token: ***
+2026-09-22T00:53:29.6503620Z   ssh-strict: true
+2026-09-22T00:53:29.6504288Z   ssh-user: git
+2026-09-22T00:53:29.6505025Z   persist-credentials: true
+2026-09-22T00:53:29.6506115Z   clean: true
+2026-09-22T00:53:29.6506819Z   sparse-checkout-cone-mode: true
+2026-09-22T00:53:29.6507656Z   fetch-tags: false
+2026-09-22T00:53:29.6508345Z   show-progress: true
+2026-09-22T00:53:29.6509052Z   lfs: false
+2026-09-22T00:53:29.6509752Z   submodules: false
+2026-09-22T00:53:29.6510451Z   set-safe-directory: true
+2026-09-22T00:53:29.6511247Z   allow-unsafe-pr-checkout: false
+2026-09-22T00:53:29.6512271Z env:
+2026-09-22T00:53:29.6512892Z   IMAGE_NAME: novamarket
+2026-09-22T00:53:29.6513623Z ##[endgroup]
+2026-09-22T00:53:29.7372652Z Syncing repository: AngelPenaGarcia05/ta1_herramientas_tic_pipeline
+2026-09-22T00:53:29.7376554Z ##[group]Getting Git version info
+2026-09-22T00:53:29.7378773Z Working directory is '/home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline'
+2026-09-22T00:53:29.7381838Z [command]/usr/bin/git version
+2026-09-22T00:53:29.7419084Z git version 2.55.0
+2026-09-22T00:53:29.7438837Z ##[endgroup]
+2026-09-22T00:53:29.7452826Z Temporarily overriding HOME='/home/runner/work/_temp/ce210bb8-123d-4682-a2c0-d3a92bdb5317' before making global git config changes
+2026-09-22T00:53:29.7456487Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-22T00:53:29.7459955Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline
+2026-09-22T00:53:29.7515479Z Deleting the contents of '/home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline'
+2026-09-22T00:53:29.7526422Z ##[group]Initializing the repository
+2026-09-22T00:53:29.7534585Z [command]/usr/bin/git init /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline
+2026-09-22T00:53:29.7652027Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-22T00:53:29.7654924Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-22T00:53:29.7657401Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-22T00:53:29.7659290Z hint: call:
+2026-09-22T00:53:29.7660188Z hint:
+2026-09-22T00:53:29.7661376Z hint: 	git config --global init.defaultBranch <name>
+2026-09-22T00:53:29.7662802Z hint:
+2026-09-22T00:53:29.7664139Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-22T00:53:29.7666600Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-22T00:53:29.7668373Z hint:
+2026-09-22T00:53:29.7669299Z hint: 	git branch -m <name>
+2026-09-22T00:53:29.7670391Z hint:
+2026-09-22T00:53:29.7671869Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-22T00:53:29.7674466Z Initialized empty Git repository in /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline/.git/
+2026-09-22T00:53:29.7684248Z [command]/usr/bin/git remote add origin https://github.com/AngelPenaGarcia05/ta1_herramientas_tic_pipeline
+2026-09-22T00:53:29.7715849Z ##[endgroup]
+2026-09-22T00:53:29.7717662Z ##[group]Disabling automatic garbage collection
+2026-09-22T00:53:29.7719384Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-22T00:53:29.7748172Z ##[endgroup]
+2026-09-22T00:53:29.7749912Z ##[group]Setting up auth
+2026-09-22T00:53:29.7753757Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-22T00:53:29.7792919Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-22T00:53:29.8153774Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-22T00:53:29.8186885Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-22T00:53:29.8387910Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-22T00:53:29.8422362Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-22T00:53:29.8623463Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-22T00:53:29.8659729Z ##[endgroup]
+2026-09-22T00:53:29.8661537Z ##[group]Fetching the repository
+2026-09-22T00:53:29.8669608Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-09-22T00:53:30.6233362Z From https://github.com/AngelPenaGarcia05/ta1_herramientas_tic_pipeline
+2026-09-22T00:53:30.6234237Z  * [new branch]      main          -> origin/main
+2026-09-22T00:53:30.6234781Z  * [new branch]      prueba-vitest -> origin/prueba-vitest
+2026-09-22T00:53:30.6244508Z [command]/usr/bin/git branch --list --remote origin/prueba-vitest
+2026-09-22T00:53:30.6270867Z   origin/prueba-vitest
+2026-09-22T00:53:30.6279503Z [command]/usr/bin/git rev-parse refs/remotes/origin/prueba-vitest
+2026-09-22T00:53:30.6302522Z c60f1875b10af178aa72c3408246a5321aecd193
+2026-09-22T00:53:30.6367112Z ##[endgroup]
+2026-09-22T00:53:30.6368277Z ##[group]Determining the checkout info
+2026-09-22T00:53:30.6369620Z ##[endgroup]
+2026-09-22T00:53:30.6370179Z [command]/usr/bin/git sparse-checkout disable
+2026-09-22T00:53:30.6470237Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-22T00:53:30.6499578Z ##[group]Checking out the ref
+2026-09-22T00:53:30.6503224Z [command]/usr/bin/git checkout --progress --force -B prueba-vitest refs/remotes/origin/prueba-vitest
+2026-09-22T00:53:30.6603928Z Switched to a new branch 'prueba-vitest'
+2026-09-22T00:53:30.6608999Z branch 'prueba-vitest' set up to track 'origin/prueba-vitest'.
+2026-09-22T00:53:30.6613840Z ##[endgroup]
+2026-09-22T00:53:30.6652281Z [command]/usr/bin/git log -1 --format=%H
+2026-09-22T00:53:30.6676827Z c60f1875b10af178aa72c3408246a5321aecd193
+2026-09-22T00:53:30.6855991Z ##[group]Run if [ -n "$SONAR_TOKEN" ]; then
+2026-09-22T00:53:30.6856496Z if [ -n "$SONAR_TOKEN" ]; then
+2026-09-22T00:53:30.6856921Z   echo "enabled=true" >> "$GITHUB_OUTPUT"
+2026-09-22T00:53:30.6857311Z else
+2026-09-22T00:53:30.6857662Z   echo "enabled=false" >> "$GITHUB_OUTPUT"
+2026-09-22T00:53:30.6858051Z fi
+2026-09-22T00:53:30.6892985Z shell: /usr/bin/bash -e {0}
+2026-09-22T00:53:30.6893358Z env:
+2026-09-22T00:53:30.6893660Z   IMAGE_NAME: novamarket
+2026-09-22T00:53:30.6894233Z   SONAR_TOKEN: ***
+2026-09-22T00:53:30.6894545Z ##[endgroup]
+2026-09-22T00:53:30.7068961Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-09-22T00:53:30.7070597Z ##[group]Run actions/setup-node@v4
+2026-09-22T00:53:30.7070934Z with:
+2026-09-22T00:53:30.7071213Z   node-version: 20
+2026-09-22T00:53:30.7071504Z   cache: npm
+2026-09-22T00:53:30.7071805Z   always-auth: false
+2026-09-22T00:53:30.7072107Z   check-latest: false
+2026-09-22T00:53:30.7074334Z   token: ***
+2026-09-22T00:53:30.7074607Z env:
+2026-09-22T00:53:30.7074877Z   IMAGE_NAME: novamarket
+2026-09-22T00:53:30.7075172Z ##[endgroup]
+2026-09-22T00:53:30.8252761Z Attempting to download 20...
+2026-09-22T00:53:30.8337664Z (node:2031) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-09-22T00:53:30.8338877Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-22T00:53:31.8125043Z Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-linux-x64.tar.gz
+2026-09-22T00:53:32.3000385Z Extracting ...
+2026-09-22T00:53:32.3096519Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/e2469ab5-82d4-464d-a56e-bad0a67b0855 -f /home/runner/work/_temp/ee960571-e0c9-4278-bb80-9da5d8cabf4a
+2026-09-22T00:53:33.1642525Z Adding to the cache ...
+2026-09-22T00:53:36.3360108Z ##[group]Environment details
+2026-09-22T00:53:36.5186852Z node: v20.20.2
+2026-09-22T00:53:36.5187249Z npm: 10.8.2
+2026-09-22T00:53:36.5187446Z yarn: 1.22.22
+2026-09-22T00:53:36.5187935Z ##[endgroup]
+2026-09-22T00:53:36.5202239Z [command]/opt/hostedtoolcache/node/20.20.2/x64/bin/npm config get cache
+2026-09-22T00:53:36.6026069Z /home/runner/.npm
+2026-09-22T00:53:36.8050457Z npm cache is not found
+2026-09-22T00:53:36.8193152Z ##[group]Run npm ci
+2026-09-22T00:53:36.8193378Z npm ci
+2026-09-22T00:53:36.8228210Z shell: /usr/bin/bash -e {0}
+2026-09-22T00:53:36.8228461Z env:
+2026-09-22T00:53:36.8228633Z   IMAGE_NAME: novamarket
+2026-09-22T00:53:36.8228832Z ##[endgroup]
+2026-09-22T00:53:38.9067884Z npm warn deprecated prom-client@15.1.3: prom-client has been replaced by @prometheus-io/client
+2026-09-22T00:53:40.5441326Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-09-22T00:53:42.5158083Z npm warn deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2026-09-22T00:53:52.6670488Z
+2026-09-22T00:53:52.6671287Z > novamarket@1.0.0 postinstall
+2026-09-22T00:53:52.6671737Z > prisma generate
+2026-09-22T00:53:52.6672015Z
+2026-09-22T00:53:53.2376537Z warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+2026-09-22T00:53:53.2377626Z For more information, see: https://pris.ly/prisma-config
+2026-09-22T00:53:53.2377916Z
+2026-09-22T00:53:53.3685104Z Prisma schema loaded from prisma/schema.prisma
+2026-09-22T00:53:53.7392715Z Update available 6.19.3 -> 8.0.0-rc.15
+2026-09-22T00:53:53.7394035Z ✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 176ms
+2026-09-22T00:53:53.7401925Z
+2026-09-22T00:53:53.7402433Z Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+2026-09-22T00:53:53.7402751Z
+2026-09-22T00:53:53.7661159Z
+2026-09-22T00:53:53.7662260Z added 526 packages, and audited 527 packages in 17s
+2026-09-22T00:53:53.7663027Z
+2026-09-22T00:53:53.7682416Z 182 packages are looking for funding
+2026-09-22T00:53:53.7683137Z   run `npm fund` for details
+2026-09-22T00:53:53.8823530Z
+2026-09-22T00:53:53.8824318Z 11 vulnerabilities (4 moderate, 5 high, 2 critical)
+2026-09-22T00:53:53.8824688Z
+2026-09-22T00:53:53.8824983Z To address all issues (including breaking changes), run:
+2026-09-22T00:53:53.8825434Z   npm audit fix --force
+2026-09-22T00:53:53.8825791Z
+2026-09-22T00:53:53.8825945Z Run `npm audit` for details.
+2026-09-22T00:53:53.9195078Z ##[group]Run npm run lint
+2026-09-22T00:53:53.9195354Z npm run lint
+2026-09-22T00:53:53.9234858Z shell: /usr/bin/bash -e {0}
+2026-09-22T00:53:53.9235079Z env:
+2026-09-22T00:53:53.9235255Z   IMAGE_NAME: novamarket
+2026-09-22T00:53:53.9235457Z ##[endgroup]
+2026-09-22T00:53:54.0214089Z
+2026-09-22T00:53:54.0214767Z > novamarket@1.0.0 lint
+2026-09-22T00:53:54.0215188Z > next lint
+2026-09-22T00:53:54.0215337Z
+2026-09-22T00:53:54.1578535Z `next lint` is deprecated and will be removed in Next.js 16.
+2026-09-22T00:53:54.1579326Z For new projects, use create-next-app to choose your preferred linter.
+2026-09-22T00:53:54.1579980Z For existing projects, migrate to the ESLint CLI:
+2026-09-22T00:53:54.1580546Z npx @next/codemod@canary next-lint-to-eslint-cli .
+2026-09-22T00:53:54.1580845Z
+2026-09-22T00:53:56.1505881Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+2026-09-22T00:53:56.1506880Z This information is used to shape Next.js' roadmap and prioritize features.
+2026-09-22T00:53:56.1508045Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2026-09-22T00:53:56.1509174Z https://nextjs.org/telemetry
+2026-09-22T00:53:56.1509382Z
+2026-09-22T00:53:56.3569591Z ✔ No ESLint warnings or errors
+2026-09-22T00:53:56.4423961Z ##[group]Run npm run test:coverage
+2026-09-22T00:53:56.4424237Z npm run test:coverage
+2026-09-22T00:53:56.4457094Z shell: /usr/bin/bash -e {0}
+2026-09-22T00:53:56.4457311Z env:
+2026-09-22T00:53:56.4457489Z   IMAGE_NAME: novamarket
+2026-09-22T00:53:56.4457680Z ##[endgroup]
+2026-09-22T00:53:56.5386308Z
+2026-09-22T00:53:56.5386921Z > novamarket@1.0.0 test:coverage
+2026-09-22T00:53:56.5387401Z > vitest run --coverage
+2026-09-22T00:53:56.5387608Z
+2026-09-22T00:53:56.7811877Z The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+2026-09-22T00:53:57.1006978Z
+2026-09-22T00:53:57.1008533Z  RUN  v2.1.9 /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline
+2026-09-22T00:53:57.1009175Z       Coverage enabled with v8
+2026-09-22T00:53:57.1009358Z
+2026-09-22T00:53:57.3649394Z  ✓ tests/rbac.test.ts (7 tests) 4ms
+2026-09-22T00:53:57.3717149Z  ❯ tests/pricing.test.ts (16 tests | 1 failed) 15ms
+2026-09-22T00:53:57.3718262Z    × lineSubtotalCents > multiplica precio unitario por cantidad 10ms
+2026-09-22T00:53:57.3742678Z      → expected 5997 to be 999999 // Object.is equality
+2026-09-22T00:53:57.4010106Z  ✓ tests/validations.test.ts (7 tests) 6ms
+2026-09-22T00:53:57.6115185Z  ✓ tests/order-status.test.ts (5 tests) 4ms
+2026-09-22T00:53:57.7887602Z
+2026-09-22T00:53:57.7894805Z ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+2026-09-22T00:53:57.7895065Z
+2026-09-22T00:53:57.7897010Z FAIL tests/pricing.test.ts > lineSubtotalCents > multiplica precio unitario por cantidad
+2026-09-22T00:53:57.7914746Z AssertionError: expected 5997 to be 999999 // Object.is equality
+2026-09-22T00:53:57.7915177Z
+2026-09-22T00:53:57.7915353Z - Expected
+2026-09-22T00:53:57.7915784Z + Received
+2026-09-22T00:53:57.7915939Z
+2026-09-22T00:53:57.7916099Z - 999999
+2026-09-22T00:53:57.7916382Z + 5997
+2026-09-22T00:53:57.7916537Z
+2026-09-22T00:53:57.7916896Z  ❯ tests/pricing.test.ts:15:70
+2026-09-22T00:53:57.8046647Z     13| describe("lineSubtotalCents", () => {
+2026-09-22T00:53:57.8047332Z     14|   it("multiplica precio unitario por cantidad", () => {
+2026-09-22T00:53:57.8048245Z     15|     expect(lineSubtotalCents({ unitPriceCents: 1999, quantity: 3 })).t…
+2026-09-22T00:53:57.8048960Z        |                                                                     ^
+2026-09-22T00:53:57.8049361Z     16|   });
+2026-09-22T00:53:57.8049878Z     17|
+2026-09-22T00:53:57.8050182Z
+2026-09-22T00:53:57.8050705Z  Test Files  1 failed | 3 passed (4)
+2026-09-22T00:53:57.8051529Z       Tests  1 failed | 34 passed (35)
+2026-09-22T00:53:57.8052106Z    Start at  00:53:56
+2026-09-22T00:53:57.8052960Z    Duration  688ms (transform 109ms, setup 0ms, collect 214ms, tests 30ms, environment 1ms, prepare 304ms)
+2026-09-22T00:53:57.8053355Z
+2026-09-22T00:53:57.8054440Z ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+2026-09-22T00:53:57.8069921Z
+2026-09-22T00:53:57.8069948Z
+2026-09-22T00:53:57.8089049Z ##[error]AssertionError: expected 5997 to be 999999 // Object.is equality
+
+- Expected
++ Received
+
+- 999999
++ 5997
+
+ ❯ tests/pricing.test.ts:15:70
+
+
+2026-09-22T00:53:57.8309757Z ##[error]Process completed with exit code 1.
+2026-09-22T00:53:57.8415825Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-09-22T00:53:57.8416776Z Post job cleanup.
+2026-09-22T00:53:57.9127076Z [command]/usr/bin/git version
+2026-09-22T00:53:57.9165024Z git version 2.55.0
+2026-09-22T00:53:57.9196950Z Temporarily overriding HOME='/home/runner/work/_temp/9fcb3218-6d27-4e1b-a276-1adb9cf576be' before making global git config changes
+2026-09-22T00:53:57.9198375Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-22T00:53:57.9201404Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline
+2026-09-22T00:53:57.9238508Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-22T00:53:57.9271534Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-22T00:53:57.9502089Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-22T00:53:57.9518205Z http.https://github.com/.extraheader
+2026-09-22T00:53:57.9527355Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-09-22T00:53:57.9556982Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-22T00:53:57.9784962Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-22T00:53:57.9821756Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-22T00:53:58.0177635Z Cleaning up orphan processes
+2026-09-22T00:53:58.0417102Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
