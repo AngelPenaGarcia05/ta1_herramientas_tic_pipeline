@@ -12,7 +12,7 @@
   "fue_recortado_el_log": false,
   "conteo_secretos": {},
   "log_redactado": "Run started\nStep 4/12\nWaiting for runner...\n",
-  "respuesta_cruda": "{\n  \"estado\": \"INDETERMINADO\",\n  \"etapa\": \"INDETERMINADO\",\n  \"categoria_causa\": \"DESCONOCIDA\",\n  \"causa_probable\": \"El log proporcionado es demasiado corto y no contiene mensajes de error ni de éxito que permitan identificar la etapa o la causa del fallo.\",\n  \"evidencia\": [\n    \"Run started\",\n    \"Step 4/12\",\n    \"Waiting for runner...\"\n  ],\n  \"severidad\": \"BAJA\",\n  \"acciones_sugeridas\": [\n    \"Obtener el log completo del pipeline, incluyendo todos los pasos de los jobs.\",\n    \"Revisar los mensajes de salida de cada job (Tests y SonarCloud, Build y push, Terraform apply, Deploy en Render).\",\n    \"Buscar cualquier línea que indique \\\"error\\\", \\\"failed\\\" o códigos de salida diferentes a 0.\",\n    \"Verificar que los artefactos (imagen Docker, estado de Terraform) se hayan creado correctamente.\",\n    \"Si el fallo ocurre en Render, revisar también los logs de despliegue y healthcheck de Render.\"\n  ],\n  \"reintento_seguro\": null,\n  \"confianza\": \"BAJA\",\n  \"informacion_faltante\": [\n    \"Log completo del job que falló o finalizó.\",\n    \"Mensajes de error o códigos de salida de los pasos críticos.\",\n    \"Salida de los comandos de migración Prisma y healthcheck de Render.\"\n  ],\n  \"fuera_de_alcance\": false\n}",
+  "respuesta_cruda": "{\n  \"estado\": \"INDETERMINADO\",\n  \"etapa\": \"INDETERMINADO\",\n  \"categoria_causa\": \"DESCONOCIDA\",\n  \"causa_probable\": \"El log proporcionado es demasiado corto y no contiene mensajes de error ni de éxito que permitan identificar la etapa o la causa del fallo.\",\n  \"evidencia\": [\n    \"Run started\",\n    \"Step 4/12\",\n    \"Waiting for runner...\"\n  ],\n  \"severidad\": \"BAJA\",\n  \"acciones_sugeridas\": [\n    \"Obtener el log completo del pipeline de GitHub Actions.\",\n    \"Buscar mensajes de error o de éxito en cada job (test-and-quality, build-and-push, deploy-infra).\",\n    \"Verificar si algún paso se quedó en 'waiting for runner' sin avanzar.\",\n    \"Revisar los logs de Render para detectar fallos de healthcheck o migraciones.\",\n    \"Asegurarse de que los artefactos (imagen Docker, estado de Terraform) se generaron correctamente.\"\n  ],\n  \"reintento_seguro\": null,\n  \"confianza\": \"BAJA\",\n  \"informacion_faltante\": [\n    \"Log completo del pipeline, incluyendo salida de cada paso.\",\n    \"Mensajes de error o éxito que indiquen en qué job ocurrió el problema.\",\n    \"Detalles de los logs de Render (si el fallo está en despliegue o healthcheck).\"\n  ],\n  \"fuera_de_alcance\": false\n}",
   "formato_valido": true,
   "chequeos": [
     {
@@ -73,18 +73,18 @@
     ],
     "severidad": "BAJA",
     "acciones_sugeridas": [
-      "Obtener el log completo del pipeline, incluyendo todos los pasos de los jobs.",
-      "Revisar los mensajes de salida de cada job (Tests y SonarCloud, Build y push, Terraform apply, Deploy en Render).",
-      "Buscar cualquier línea que indique \"error\", \"failed\" o códigos de salida diferentes a 0.",
-      "Verificar que los artefactos (imagen Docker, estado de Terraform) se hayan creado correctamente.",
-      "Si el fallo ocurre en Render, revisar también los logs de despliegue y healthcheck de Render."
+      "Obtener el log completo del pipeline de GitHub Actions.",
+      "Buscar mensajes de error o de éxito en cada job (test-and-quality, build-and-push, deploy-infra).",
+      "Verificar si algún paso se quedó en 'waiting for runner' sin avanzar.",
+      "Revisar los logs de Render para detectar fallos de healthcheck o migraciones.",
+      "Asegurarse de que los artefactos (imagen Docker, estado de Terraform) se generaron correctamente."
     ],
     "reintento_seguro": null,
     "confianza": "BAJA",
     "informacion_faltante": [
-      "Log completo del job que falló o finalizó.",
-      "Mensajes de error o códigos de salida de los pasos críticos.",
-      "Salida de los comandos de migración Prisma y healthcheck de Render."
+      "Log completo del pipeline, incluyendo salida de cada paso.",
+      "Mensajes de error o éxito que indiquen en qué job ocurrió el problema.",
+      "Detalles de los logs de Render (si el fallo está en despliegue o healthcheck)."
     ],
     "fuera_de_alcance": false
   },

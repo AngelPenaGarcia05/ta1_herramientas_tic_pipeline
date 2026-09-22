@@ -49,8 +49,8 @@ def test_cargar_casos_marca_pendientes_y_disponibles(tmp_path):
 def test_casos_de_ejemplo_reales_del_proyecto():
     """
     Corre sobre la carpeta casos/ real del proyecto: confirma que
-    casos.json tiene los 6 casos esperados y cuales ya tienen un log real
-    cargado (1, 2 y 6) vs. cuales siguen pendientes (3, 4 y 5).
+    casos.json tiene los 6 casos esperados y que todos ya tienen un log
+    real cargado (ninguno sigue pendiente).
     """
     casos = casos_utils.cargar_casos(CARPETA_CASOS_REAL)
     ids = {c["id"] for c in casos}
@@ -63,9 +63,4 @@ def test_casos_de_ejemplo_reales_del_proyecto():
         "caso_06_log_corto_sin_contexto",
     }
     disponibles = {c["id"] for c in casos if not c["pendiente"]}
-    assert disponibles == {
-        "caso_01_terraform_free_tier",
-        "caso_02_render_imagen_sha",
-        "caso_05_exitoso",
-        "caso_06_log_corto_sin_contexto",
-    }
+    assert disponibles == ids

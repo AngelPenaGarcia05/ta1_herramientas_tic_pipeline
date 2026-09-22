@@ -24,7 +24,11 @@ import redactor
 
 # Longitud maxima por defecto del log antes de recortarlo. Configurable por
 # quien llama a validar_entrada (por ejemplo, para las pruebas).
-MAX_CARACTERES_POR_DEFECTO = 20_000
+# 10_000 y no mas: con el prompt v2 (plantilla ~5400 caracteres) y logs reales
+# de GitHub Actions (muy densos en tokens por los timestamps), un log de
+# ~20_000 caracteres ya pedia ~9800 tokens y superaba el limite gratuito de
+# Groq de 8000 TPM (verificado contra la API real con openai/gpt-oss-120b).
+MAX_CARACTERES_POR_DEFECTO = 10_000
 
 MARCA_RECORTE = "\n\n[... LOG RECORTADO: se omitio la parte central por longitud ...]\n\n"
 

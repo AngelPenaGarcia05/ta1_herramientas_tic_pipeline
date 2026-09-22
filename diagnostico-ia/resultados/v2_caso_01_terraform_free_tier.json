@@ -14,7 +14,7 @@
     "credencial_por_nombre": 1
   },
   "log_redactado": "Run terraform apply -input=false -auto-approve\nrandom_password.auth_secret: [REDACTADO:credencial_por_nombre] state... [id=none]\nrender_postgres.db: Refreshing state... [id=dpg-dab1c52d0e5s73d2os60-a]\nrender_web_service.app: Refreshing state... [id=srv-dab1clqd0e5s73d2q2ug]\n\nTerraform used the selected providers to generate the following execution\nplan. Resource actions are indicated with the following symbols:\n  ~ update in-place\n\nTerraform will perform the following actions:\n\n  # render_web_service.app will be updated in-place\n  ~ resource \"render_web_service\" \"app\" {\n      + active_custom_domains         = (known after apply)\n        id                            = \"srv-dab1clqd0e5s73d2q2ug\"\n      + log_stream_override           = (known after apply)\n      + max_shutdown_delay_seconds    = (known after apply)\n        name                          = \"novamarket\"\n      + num_instances                 = (known after apply)\n      ~ runtime_source                = {\n          ~ image = {\n              + digest    = (known after apply)\n              ~ tag       = \"490992347f351da65a81ac9b93effb2ffab73f92\" -> \"c173a65e8d961296fae09c4577905d683fb071a1\"\n                # (1 unchanged attribute hidden)\n            }\n        }\n        # (11 unchanged attributes hidden)\n    }\n\nPlan: 0 to add, 1 to change, 0 to destroy.\nrender_web_service.app: Modifying... [id=srv-dab1clqd0e5s73d2q2ug]\n\nWarning: Redundant ignore_changes element\n\n  on main.tf line 48, in resource \"render_web_service\" \"app\":\n  48: resource \"render_web_service\" \"app\" {\n\nAdding an attribute name to ignore_changes tells Terraform to ignore future\nchanges to the argument in configuration after the object has been created,\nretaining the value originally configured.\n\nThe attribute slug is decided by the provider alone and therefore there can\nbe no configured value to compare with. Including this attribute in\nignore_changes has no effect. Remove the attribute from ignore_changes to\nquiet this warning.\n\nError: Error updating service\n\n  with render_web_service.app,\n  on main.tf line 48, in resource \"render_web_service\" \"app\":\n  48: resource \"render_web_service\" \"app\" {\n\nCould not update service, unexpected error: could not update service:\nmaintenance mode can only be configured for non-free tier services\n",
-  "respuesta_cruda": "{\n  \"estado\": \"FALLO\",\n  \"etapa\": \"TERRAFORM\",\n  \"categoria_causa\": \"CONFIGURACION\",\n  \"causa_probable\": \"Se intentó habilitar maintenance mode en un servicio de tier gratuito, lo cual no está permitido por Render\",\n  \"evidencia\": [\n    \"Error: Error updating service\",\n    \"maintenance mode can only be configured for non-free tier services\",\n    \"render_web_service.app will be updated in-place\"\n  ],\n  \"severidad\": \"ALTA\",\n  \"acciones_sugeridas\": [\n    \"Eliminar la configuración de maintenance mode del recurso render_web_service en main.tf\",\n    \"Verificar que el servicio Render esté en un plan de pago si se necesita maintenance mode\",\n    \"Ejecutar terraform plan localmente para confirmar que no haya más cambios no soportados\",\n    \"Actualizar la documentación del proyecto indicando la restricción de maintenance mode en tier gratuito\",\n    \"Re‑ejecutar el pipeline después de aplicar los cambios de configuración\"\n  ],\n  \"reintento_seguro\": false,\n  \"confianza\": \"ALTA\",\n  \"informacion_faltante\": [],\n  \"fuera_de_alcance\": false\n}",
+  "respuesta_cruda": "{\n  \"estado\": \"FALLO\",\n  \"etapa\": \"TERRAFORM\",\n  \"categoria_causa\": \"CONFIGURACION\",\n  \"causa_probable\": \"El recurso render_web_service.app intenta habilitar maintenance mode, pero el servicio está en el plan gratuito donde esa opción no está permitida\",\n  \"evidencia\": [\n    \"Error: Error updating service\",\n    \"maintenance mode can only be configured for non-free tier services\",\n    \"render_web_service.app will be updated in-place\"\n  ],\n  \"severidad\": \"ALTA\",\n  \"acciones_sugeridas\": [\n    \"Eliminar o comentar la configuración de maintenance_mode en el recurso render_web_service del archivo main.tf\",\n    \"Si se necesita maintenance mode, actualizar el servicio a un plan de pago en Render\",\n    \"Re‑ejecutar terraform plan para confirmar que el plan ya no muestra errores\",\n    \"Revisar la documentación del provider render-oss/render para los atributos permitidos en el tier gratuito\",\n    \"Una vez corregido, volver a ejecutar el pipeline CI/CD\"\n  ],\n  \"reintento_seguro\": false,\n  \"confianza\": \"ALTA\",\n  \"informacion_faltante\": [],\n  \"fuera_de_alcance\": false\n}",
   "formato_valido": true,
   "chequeos": [
     {
@@ -67,7 +67,7 @@
     "estado": "FALLO",
     "etapa": "TERRAFORM",
     "categoria_causa": "CONFIGURACION",
-    "causa_probable": "Se intentó habilitar maintenance mode en un servicio de tier gratuito, lo cual no está permitido por Render",
+    "causa_probable": "El recurso render_web_service.app intenta habilitar maintenance mode, pero el servicio está en el plan gratuito donde esa opción no está permitida",
     "evidencia": [
       "Error: Error updating service",
       "maintenance mode can only be configured for non-free tier services",
@@ -75,11 +75,11 @@
     ],
     "severidad": "ALTA",
     "acciones_sugeridas": [
-      "Eliminar la configuración de maintenance mode del recurso render_web_service en main.tf",
-      "Verificar que el servicio Render esté en un plan de pago si se necesita maintenance mode",
-      "Ejecutar terraform plan localmente para confirmar que no haya más cambios no soportados",
-      "Actualizar la documentación del proyecto indicando la restricción de maintenance mode en tier gratuito",
-      "Re‑ejecutar el pipeline después de aplicar los cambios de configuración"
+      "Eliminar o comentar la configuración de maintenance_mode en el recurso render_web_service del archivo main.tf",
+      "Si se necesita maintenance mode, actualizar el servicio a un plan de pago en Render",
+      "Re‑ejecutar terraform plan para confirmar que el plan ya no muestra errores",
+      "Revisar la documentación del provider render-oss/render para los atributos permitidos en el tier gratuito",
+      "Una vez corregido, volver a ejecutar el pipeline CI/CD"
     ],
     "reintento_seguro": false,
     "confianza": "ALTA",

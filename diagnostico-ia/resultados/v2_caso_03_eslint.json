@@ -1,0 +1,90 @@
+{
+  "id": "caso_03_eslint",
+  "descripcion": "Fallo del paso Lint (ESLint) en el job test-and-quality",
+  "esperado": {
+    "estado": "FALLO",
+    "etapa": "LINT"
+  },
+  "version_prompt": "v2",
+  "error": null,
+  "intentos": 1,
+  "generado_localmente": false,
+  "fue_recortado_el_log": false,
+  "conteo_secretos": {
+    "credencial_por_nombre": 1
+  },
+  "log_redactado": "2026-09-22T00:03:40.9028089Z Current runner version: '2.337.0'\n2026-09-22T00:03:40.9054008Z ##[group]Runner Image Provisioner\n2026-09-22T00:03:40.9055113Z Hosted Compute Agent\n2026-09-22T00:03:40.9055748Z Version: 20260828.587\n2026-09-22T00:03:40.9056496Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29\n2026-09-22T00:03:40.9057243Z Build Date: 2026-08-28T16:44:25Z\n2026-09-22T00:03:40.9057970Z Worker ID: {fb5e03d7-7565-463a-ab62-0ecc54bd8137}\n2026-09-22T00:03:40.9058755Z Azure Region: eastus\n2026-09-22T00:03:40.9059352Z ##[endgroup]\n2026-09-22T00:03:40.9060991Z ##[group]Operating System\n2026-09-22T00:03:40.9061651Z Ubuntu\n2026-09-22T00:03:40.9062260Z 24.04.5\n2026-09-22T00:03:40.9062778Z LTS\n2026-09-22T00:03:40.9063471Z ##[endgroup]\n2026-09-22T00:03:40.9064056Z ##[group]Runner Image\n2026-09-22T00:03:40.9065209Z Image: ubuntu-24.04\n2026-09-22T00:03:40.9066068Z Version: 20260907.300.1\n2026-09-22T00:03:40.9067409Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md\n2026-09-22T00:03:40.9069031Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300\n2026-09-22T00:03:40.9070439Z ##[endgroup]\n2026-09-22T00:03:40.9071720Z ##[group]GITHUB_TOKEN Permissions\n2026-09-22T00:03:40.9073989Z Contents: read\n2026-09-22T00:03:40.9075018Z Metadata: read\n2026-09-22T00:03:40.9075599Z Packages: read\n2026-09-22T00:03:40.9076289Z ##[endgroup]\n2026-09-22T00:03:40.9078558Z Secret source: Actions\n2026-09-22T00:03:40.9079528Z Cache mode: write\n2026-09-22T00:03:40.9080488Z Prepare workflow directory\n2026-09-22T00:03:40.9481614Z Prepare all required actions\n2026-09-22T00:03:40.9530143Z Getting action download info\n2026-09-22T00:03:41.1641396Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)\n2026-09-22T00:03:41.2697878Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)\n2026-09-22T00:03:41.3601608Z Download action repository 'SonarSource/sonarqube-scan-action@v4' (SHA:689fb39b34b9aa95ebc5f8f119343ddd51542402)\n2026-09-22T00:03:41.5767343Z Getting action download info\n2026-09-22T00:03:41.6481134Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)\n2026-09-22T00:03:41.7626568Z Complete job name: Tests y SonarCloud\n2026-09-22T00:03:41.8404589Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\n2026-09-22T00:03:41.8413643Z ##[group]Run actions/checkout@v4\n2026-09-22T00:03:41.8414694Z with:\n2026-09-22T00:03:41.8415280Z   fetch-depth: 0\n2026-09-22T00:03:41.8416063Z   repository: AngelPenaGarcia05/ta1_herramientas_tic_pipeline\n2026-09-22T00:03:41.8420293Z   token: [REDACTADO:credencial_por_nombre]\n2026-09-22T00:03:41.8420735Z   ssh-strict: true\n2026-09-22T00:03:41.8421173Z   ssh-user: git\n2026-09-22T00:03:41.8421654Z   persist-credentials: true\n2026-09-22T00:03:41.8422137Z   clean: true\n2026-09-22T00:03:41.8422588Z   sparse-checkout-cone-mode: true\n2026-09-22T00:03:41.8423108Z   fetch-tags: false\n2026-09-22T00:03:41.8423560Z   show-progress: true\n2026-09-22T00:03:41.8424005Z   lfs: false\n2026-09-22T00:03:41.8424625Z   submodules: false\n2026-09-22T00:03:41.8425095Z   set-safe-directory: true\n2026-09-22T00:03:41.8425607Z   allow-unsafe-pr-checkout: false\n2026-09-22T00:03:41.8426429Z env:\n2026-09-22T00:03:41.8426886Z   IMAGE_NAME: novamarket\n2026-09-22T00:03:41.8427350Z ##[endgroup]\n2026-09-22T00:03:41.9607845Z Syncing repository: AngelPenaGarcia05/ta1_herramientas_tic_pipeline\n2026-09-22T00:03:42.4732994Z From https://github.com/AngelPenaGarcia05/ta1_herramientas_tic_pipeline\n2026-09-22T00:03:42.4735256Z  * [new branch]      main          -> origin/main\n2026-09-22T00:03:42.4736657Z  * [new branch]      prueba-eslint -> origin/prueba-eslint\n2026-09-22T00:03:42.4787228Z [command]/usr/bin/git branch --list --remote origin/prueba-eslint\n2026-09-22T00:03:42.4807242Z   origin/prueba-eslint\n2026-09-22T00:03:42.4817281Z [command]/usr/bin/git rev-parse refs/remotes/origin/prueba-eslint\n2026-09-22T00:03:42.4846528Z c386fefd4dc3c120dd2b8332a1c9050a58e680c3\n2026-09-22T00:03:42.4976291Z [command]/usr/bin/git checkout --progress --force -B prueba-eslint refs/remotes/origin/prueba-eslint\n2026-09-22T00:03:42.5129558Z Switched to a new branch 'prueba-eslint'\n2026-09-22T00:03:42.5135307Z branch 'prueba-eslint' set up to track 'origin/prueba-eslint'.\n2026-09-22T00:03:42.5191201Z [command]/usr/bin/git log -1 --format=%H\n2026-09-22T00:03:42.5221315Z c386fefd4dc3c120dd2b8332a1c9050a58e680c3\n2026-09-22T00:03:42.5459533Z ##[group]Run if [ -n \"$SONAR_TOKEN\" ]; then\n2026-09-22T00:03:42.5801199Z Node 20 is being deprecated. This workflow is running with Node 24 by default.\n2026-09-22T00:03:42.5806390Z ##[group]Run actions/setup-node@v4\n2026-09-22T00:03:42.5807137Z with:\n2026-09-22T00:03:42.5807610Z   node-version: 20\n2026-09-22T00:03:42.5808141Z   cache: npm\n2026-09-22T00:03:46.6098535Z node: v20.20.2\n2026-09-22T00:03:46.6099007Z npm: 10.8.2\n2026-09-22T00:03:46.8060006Z ##[group]Run npm ci\n2026-09-22T00:03:46.8060293Z [36;1mnpm ci[0m\n2026-09-22T00:03:50.5807871Z npm warn deprecated prom-client@15.1.3: prom-client has been replaced by @prometheus-io/client\n2026-09-22T00:03:52.3640611Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me\n2026-09-22T00:03:54.7482974Z npm warn deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.\n2026-09-22T00:04:06.7706552Z\n2026-09-22T00:04:06.7707315Z > novamarket@1.0.0 postinstall\n2026-09-22T00:04:06.7707911Z > prisma generate\n2026-09-22T00:04:07.6667261Z Prisma schema loaded from prisma/schema.prisma\n2026-09-22T00:04:07.9450705Z ✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 105ms\n2026-09-22T00:04:07.9738887Z added 526 packages, and audited 527 packages in 21s\n2026-09-22T00:04:08.1498634Z ##[group]Run npm run lint\n2026-09-22T00:04:08.1498938Z [36;1mnpm run lint[0m\n2026-09-22T00:04:08.1535431Z shell: /usr/bin/bash -e {0}\n2026-09-22T00:04:08.1535687Z env:\n2026-09-22T00:04:08.1535892Z   IMAGE_NAME: novamarket\n2026-09-22T00:04:08.1536116Z ##[endgroup]\n2026-09-22T00:04:08.2726311Z\n2026-09-22T00:04:08.2726637Z > novamarket@1.0.0 lint\n2026-09-22T00:04:08.2726941Z > next lint\n2026-09-22T00:04:08.4384836Z `next lint` is deprecated and will be removed in Next.js 16.\n2026-09-22T00:04:08.4385933Z For new projects, use create-next-app to choose your preferred linter.\n2026-09-22T00:04:08.4386846Z For existing projects, migrate to the ESLint CLI:\n2026-09-22T00:04:08.4387624Z npx @next/codemod@canary next-lint-to-eslint-cli .\n2026-09-22T00:04:10.9452356Z Attention: Next.js now collects completely anonymous telemetry regarding usage.\n2026-09-22T00:04:11.1225140Z\n2026-09-22T00:04:11.1225990Z ./src/app/page.tsx\n2026-09-22T00:04:11.1226685Z 88:21  Error: Parsing error: Expression expected.\n2026-09-22T00:04:11.1228326Z info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules\n2026-09-22T00:04:11.2268343Z ##[error]Process completed with exit code 1.\n2026-09-22T00:04:11.2455963Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\n2026-09-22T00:04:11.2457288Z Post job cleanup.\n2026-09-22T00:04:11.4688694Z Cleaning up orphan processes\n",
+  "respuesta_cruda": "{\n  \"estado\": \"FALLO\",\n  \"etapa\": \"LINT\",\n  \"categoria_causa\": \"CODIGO\",\n  \"causa_probable\": \"Error de sintaxis en src/app/page.tsx (línea 88) que provoca un parsing error durante el lint.\",\n  \"evidencia\": [\n    \"./src/app/page.tsx\",\n    \"88:21  Error: Parsing error: Expression expected.\",\n    \"##[error]Process completed with exit code 1.\"\n  ],\n  \"severidad\": \"ALTA\",\n  \"acciones_sugeridas\": [\n    \"Abrir src/app/page.tsx y corregir la expresión que falta en la posición indicada (línea 88, columna 21).\",\n    \"Ejecutar localmente `npm run lint` para validar que el error desaparezca.\",\n    \"Actualizar la configuración de ESLint si es necesario para que sea compatible con la versión actual de Next.js.\",\n    \"Considerar migrar de `next lint` a la CLI de ESLint (`npx eslint .`) siguiendo la recomendación del log.\",\n    \"Una vez corregido, volver a ejecutar el pipeline.\"\n  ],\n  \"reintento_seguro\": true,\n  \"confianza\": \"ALTA\",\n  \"informacion_faltante\": [],\n  \"fuera_de_alcance\": false\n}",
+  "formato_valido": true,
+  "chequeos": [
+    {
+      "nombre": "json_valido",
+      "paso": true,
+      "detalle": "El texto es un objeto JSON valido"
+    },
+    {
+      "nombre": "campos_completos",
+      "paso": true,
+      "detalle": "Todos los campos presentes"
+    },
+    {
+      "nombre": "tipos_correctos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "enums_validos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "coherencia_sin_fallo",
+      "paso": true,
+      "detalle": "No aplica (estado != SIN_FALLO)"
+    },
+    {
+      "nombre": "coherencia_indeterminado",
+      "paso": true,
+      "detalle": "No aplica (estado != INDETERMINADO)"
+    },
+    {
+      "nombre": "evidencia_literal",
+      "paso": true,
+      "detalle": "Toda la evidencia aparece en el log"
+    },
+    {
+      "nombre": "sin_acciones_prohibidas",
+      "paso": true,
+      "detalle": "Ninguna accion prohibida"
+    },
+    {
+      "nombre": "sin_secretos_en_la_respuesta",
+      "paso": true,
+      "detalle": "OK"
+    }
+  ],
+  "datos": {
+    "estado": "FALLO",
+    "etapa": "LINT",
+    "categoria_causa": "CODIGO",
+    "causa_probable": "Error de sintaxis en src/app/page.tsx (línea 88) que provoca un parsing error durante el lint.",
+    "evidencia": [
+      "./src/app/page.tsx",
+      "88:21  Error: Parsing error: Expression expected.",
+      "##[error]Process completed with exit code 1."
+    ],
+    "severidad": "ALTA",
+    "acciones_sugeridas": [
+      "Abrir src/app/page.tsx y corregir la expresión que falta en la posición indicada (línea 88, columna 21).",
+      "Ejecutar localmente `npm run lint` para validar que el error desaparezca.",
+      "Actualizar la configuración de ESLint si es necesario para que sea compatible con la versión actual de Next.js.",
+      "Considerar migrar de `next lint` a la CLI de ESLint (`npx eslint .`) siguiendo la recomendación del log.",
+      "Una vez corregido, volver a ejecutar el pipeline."
+    ],
+    "reintento_seguro": true,
+    "confianza": "ALTA",
+    "informacion_faltante": [],
+    "fuera_de_alcance": false
+  },
+  "coincide_con_esperado": true
+}

@@ -7,12 +7,12 @@
   },
   "version_prompt": "v2",
   "error": null,
-  "intentos": 2,
+  "intentos": 1,
   "generado_localmente": false,
   "fue_recortado_el_log": false,
   "conteo_secretos": {},
   "log_redactado": "[Log de deploy de Render - el contenedor crashea al arrancar]\n==> Starting service...\n==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance\n==> Aplicando migraciones de base de datos (prisma migrate deploy)...\nnode:fs:573\n  return binding.open(\n                 ^\n\nError: ENOENT: no such file or directory, open '/app/node_modules/.bin/prisma_schema_build_bg.wasm'\n    at Object.openSync (node:fs:573:18)\n    at Object.readFileSync (node:fs:452:35)\n    at /app/node_modules/.bin/prisma:49:9832\n    at /app/node_modules/.bin/prisma:2:263\n    at Object.<anonymous> (/app/node_modules/.bin/prisma:259:154)\n    at Module._compile (node:internal/modules/cjs/loader:1521:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)\n    at Module.load (node:internal/modules/cjs/loader:1266:32)\n    at Module._load (node:internal/modules/cjs/loader:1091:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12) {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: '/app/node_modules/.bin/prisma_schema_build_bg.wasm'\n}\n\nNode.js v20.20.2\n==> Exited with status 1\n==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys\n==> Aplicando migraciones de base de datos (prisma migrate deploy)...\nnode:fs:573\n  return binding.open(\n                 ^\n\nError: ENOENT: no such file or directory, open '/app/node_modules/.bin/prisma_schema_build_bg.wasm'\n    at Object.openSync (node:fs:573:18)\n    at Object.readFileSync (node:fs:452:35)\n    at /app/node_modules/.bin/prisma:49:9832\n    at /app/node_modules/.bin/prisma:2:263\n    at Object.<anonymous> (/app/node_modules/.bin/prisma:259:154)\n    at Module._compile (node:internal/modules/cjs/loader:1521:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)\n    at Module.load (node:internal/modules/cjs/loader:1266:32)\n    at Module._load (node:internal/modules/cjs/loader:1091:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12) {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: '/app/node_modules/.bin/prisma_schema_build_bg.wasm'\n}\n\nNode.js v20.20.2\n\n[Panel de Render - version desplegada en ese momento]\nWeb Service: novamarket\nImage: angelpenagarcia/novamarket:490992347f351da65a81ac9b93effb2ffab73f92\nURL: https://novamarket-zgv9.onrender.com\nNota: esa no era la ultima imagen. La ultima publicada en Docker Hub en ese\nmomento era angelpenagarcia/novamarket:8edeccc16cd6a3e4cdb6a79df2315545d08cf8a9\n- el servicio estaba corriendo una version vieja y atascada.\n",
-  "respuesta_cruda": "{\n  \"estado\": \"FALLO\",\n  \"etapa\": \"MIGRATION\",\n  \"categoria_causa\": \"CONFIGURACION\",\n  \"causa_probable\": \"El binario wasm de Prisma no se encuentra en la imagen, probablemente porque las dependencias no se instalaron correctamente durante el build del contenedor.\",\n  \"evidencia\": [\n    \"Error: ENOENT: no such file or directory, open '/app/node_modules/.bin/prisma_schema_build_bg.wasm'\",\n    \"==> Aplicando migraciones de base de datos (prisma migrate deploy)...\",\n    \"Node.js v20.20.2\"\n  ],\n  \"severidad\": \"ALTA\",\n  \"acciones_sugeridas\": [\n    \"Revisar el Dockerfile y asegurarse de que el paso que instala dependencias (npm ci) se ejecute sin la bandera --production, de modo que incluya los binarios de Prisma.\",\n    \"Agregar un paso que ejecute 'npx prisma generate' en la fase de build para generar los artefactos necesarios.\",\n    \"Verificar que la capa final de la imagen copie o mantenga la carpeta node_modules completa, incluyendo los archivos .wasm.\",\n    \"Confirmar localmente que el archivo 'node_modules/.bin/prisma_schema_build_bg.wasm' existe después de ejecutar npm ci.\",\n    \"Reconstruir y volver a publicar la imagen Docker después de aplicar los cambios y ejecutar nuevamente el pipeline.\"\n  ],\n  \"reintento_seguro\": true,\n  \"confianza\": \"ALTA\",\n  \"informacion_faltante\": [],\n  \"fuera_de_alcance\": false\n}",
+  "respuesta_cruda": "{\n  \"estado\": \"FALLO\",\n  \"etapa\": \"MIGRATION\",\n  \"categoria_causa\": \"CONFIGURACION\",\n  \"causa_probable\": \"El archivo prisma_schema_build_bg.wasm no está presente en la imagen Docker, por lo que el comando prisma migrate deploy falla al iniciar el contenedor.\",\n  \"evidencia\": [\n    \"Error: ENOENT: no such file or directory, open '/app/node_modules/.bin/prisma_schema_build_bg.wasm'\",\n    \"==> Exited with status 1\",\n    \"==> Aplicando migraciones de base de datos (prisma migrate deploy)...\"\n  ],\n  \"severidad\": \"ALTA\",\n  \"acciones_sugeridas\": [\n    \"Revisar el Dockerfile y asegurarse de que se ejecuta 'npm ci' (o npm install) en la capa de build y que los node_modules se copian a la capa final.\",\n    \"Verificar que el archivo prisma_schema_build_bg.wasm no está excluido por .dockerignore.\",\n    \"Agregar un paso 'RUN npx prisma generate' en la fase de build para que se incluyan los artefactos de Prisma.\",\n    \"Construir y publicar nuevamente la imagen, comprobando que el archivo mencionado exista dentro de /app/node_modules/.bin/.\",\n    \"Probar la imagen localmente con 'docker run' para confirmar que prisma migrate deploy se ejecuta sin errores antes de desplegar en Render.\"\n  ],\n  \"reintento_seguro\": true,\n  \"confianza\": \"ALTA\",\n  \"informacion_faltante\": [],\n  \"fuera_de_alcance\": false\n}",
   "formato_valido": true,
   "chequeos": [
     {
@@ -65,19 +65,19 @@
     "estado": "FALLO",
     "etapa": "MIGRATION",
     "categoria_causa": "CONFIGURACION",
-    "causa_probable": "El binario wasm de Prisma no se encuentra en la imagen, probablemente porque las dependencias no se instalaron correctamente durante el build del contenedor.",
+    "causa_probable": "El archivo prisma_schema_build_bg.wasm no está presente en la imagen Docker, por lo que el comando prisma migrate deploy falla al iniciar el contenedor.",
     "evidencia": [
       "Error: ENOENT: no such file or directory, open '/app/node_modules/.bin/prisma_schema_build_bg.wasm'",
-      "==> Aplicando migraciones de base de datos (prisma migrate deploy)...",
-      "Node.js v20.20.2"
+      "==> Exited with status 1",
+      "==> Aplicando migraciones de base de datos (prisma migrate deploy)..."
     ],
     "severidad": "ALTA",
     "acciones_sugeridas": [
-      "Revisar el Dockerfile y asegurarse de que el paso que instala dependencias (npm ci) se ejecute sin la bandera --production, de modo que incluya los binarios de Prisma.",
-      "Agregar un paso que ejecute 'npx prisma generate' en la fase de build para generar los artefactos necesarios.",
-      "Verificar que la capa final de la imagen copie o mantenga la carpeta node_modules completa, incluyendo los archivos .wasm.",
-      "Confirmar localmente que el archivo 'node_modules/.bin/prisma_schema_build_bg.wasm' existe después de ejecutar npm ci.",
-      "Reconstruir y volver a publicar la imagen Docker después de aplicar los cambios y ejecutar nuevamente el pipeline."
+      "Revisar el Dockerfile y asegurarse de que se ejecuta 'npm ci' (o npm install) en la capa de build y que los node_modules se copian a la capa final.",
+      "Verificar que el archivo prisma_schema_build_bg.wasm no está excluido por .dockerignore.",
+      "Agregar un paso 'RUN npx prisma generate' en la fase de build para que se incluyan los artefactos de Prisma.",
+      "Construir y publicar nuevamente la imagen, comprobando que el archivo mencionado exista dentro de /app/node_modules/.bin/.",
+      "Probar la imagen localmente con 'docker run' para confirmar que prisma migrate deploy se ejecuta sin errores antes de desplegar en Render."
     ],
     "reintento_seguro": true,
     "confianza": "ALTA",
