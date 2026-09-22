@@ -29,3 +29,13 @@ infra/*.tfstate.*
 infra/terraform.tfvars
 *.tfplan
 .scannerwork/
+
+# Prototipo de diagnostico con IA (TA2) - diagnostico-ia/
+# (.env ya esta cubierto por la regla ".env" de arriba en cualquier profundidad,
+# se listan igual de forma explicita para que quede claro que estan protegidos)
+diagnostico-ia/.env
+diagnostico-ia/.venv/
+diagnostico-ia/.streamlit/secrets.toml
+__pycache__/
+*.pyc
+.pytest_cache/

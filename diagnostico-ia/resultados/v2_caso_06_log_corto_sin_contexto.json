@@ -1,0 +1,92 @@
+{
+  "id": "caso_06_log_corto_sin_contexto",
+  "descripcion": "Log de solo 3 lineas, sin contexto suficiente para diagnosticar",
+  "esperado": {
+    "estado": "INDETERMINADO",
+    "etapa": "INDETERMINADO"
+  },
+  "version_prompt": "v2",
+  "error": null,
+  "intentos": 1,
+  "generado_localmente": false,
+  "fue_recortado_el_log": false,
+  "conteo_secretos": {},
+  "log_redactado": "Run started\nStep 4/12\nWaiting for runner...\n",
+  "respuesta_cruda": "{\n  \"estado\": \"INDETERMINADO\",\n  \"etapa\": \"INDETERMINADO\",\n  \"categoria_causa\": \"DESCONOCIDA\",\n  \"causa_probable\": \"El log proporcionado es demasiado corto y no contiene mensajes de error ni de éxito que permitan identificar la etapa o la causa del fallo.\",\n  \"evidencia\": [\n    \"Run started\",\n    \"Step 4/12\",\n    \"Waiting for runner...\"\n  ],\n  \"severidad\": \"BAJA\",\n  \"acciones_sugeridas\": [\n    \"Obtener el log completo del pipeline de GitHub Actions.\",\n    \"Buscar mensajes de error o de éxito en cada job (test-and-quality, build-and-push, deploy-infra).\",\n    \"Verificar si algún paso se quedó en 'waiting for runner' sin avanzar.\",\n    \"Revisar los logs de Render para detectar fallos de healthcheck o migraciones.\",\n    \"Asegurarse de que los artefactos (imagen Docker, estado de Terraform) se generaron correctamente.\"\n  ],\n  \"reintento_seguro\": null,\n  \"confianza\": \"BAJA\",\n  \"informacion_faltante\": [\n    \"Log completo del pipeline, incluyendo salida de cada paso.\",\n    \"Mensajes de error o éxito que indiquen en qué job ocurrió el problema.\",\n    \"Detalles de los logs de Render (si el fallo está en despliegue o healthcheck).\"\n  ],\n  \"fuera_de_alcance\": false\n}",
+  "formato_valido": true,
+  "chequeos": [
+    {
+      "nombre": "json_valido",
+      "paso": true,
+      "detalle": "El texto es un objeto JSON valido"
+    },
+    {
+      "nombre": "campos_completos",
+      "paso": true,
+      "detalle": "Todos los campos presentes"
+    },
+    {
+      "nombre": "tipos_correctos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "enums_validos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "coherencia_sin_fallo",
+      "paso": true,
+      "detalle": "No aplica (estado != SIN_FALLO)"
+    },
+    {
+      "nombre": "coherencia_indeterminado",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "evidencia_literal",
+      "paso": true,
+      "detalle": "Toda la evidencia aparece en el log"
+    },
+    {
+      "nombre": "sin_acciones_prohibidas",
+      "paso": true,
+      "detalle": "Ninguna accion prohibida"
+    },
+    {
+      "nombre": "sin_secretos_en_la_respuesta",
+      "paso": true,
+      "detalle": "OK"
+    }
+  ],
+  "datos": {
+    "estado": "INDETERMINADO",
+    "etapa": "INDETERMINADO",
+    "categoria_causa": "DESCONOCIDA",
+    "causa_probable": "El log proporcionado es demasiado corto y no contiene mensajes de error ni de éxito que permitan identificar la etapa o la causa del fallo.",
+    "evidencia": [
+      "Run started",
+      "Step 4/12",
+      "Waiting for runner..."
+    ],
+    "severidad": "BAJA",
+    "acciones_sugeridas": [
+      "Obtener el log completo del pipeline de GitHub Actions.",
+      "Buscar mensajes de error o de éxito en cada job (test-and-quality, build-and-push, deploy-infra).",
+      "Verificar si algún paso se quedó en 'waiting for runner' sin avanzar.",
+      "Revisar los logs de Render para detectar fallos de healthcheck o migraciones.",
+      "Asegurarse de que los artefactos (imagen Docker, estado de Terraform) se generaron correctamente."
+    ],
+    "reintento_seguro": null,
+    "confianza": "BAJA",
+    "informacion_faltante": [
+      "Log completo del pipeline, incluyendo salida de cada paso.",
+      "Mensajes de error o éxito que indiquen en qué job ocurrió el problema.",
+      "Detalles de los logs de Render (si el fallo está en despliegue o healthcheck)."
+    ],
+    "fuera_de_alcance": false
+  },
+  "coincide_con_esperado": true
+}

@@ -15,10 +15,8 @@ export default defineConfig({
       exclude: [
         "src/**/*.d.ts",
         "**/node_modules/**",
-        // Infraestructura / integracion (no es logica de negocio pura)
+        // Cliente de base de datos: integracion pura, no se testea en unitarias
         "src/lib/prisma.ts",
-        "src/lib/metrics.ts",
-        "src/lib/observe.ts",
       ],
     },
   },

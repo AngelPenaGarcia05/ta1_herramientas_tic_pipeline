@@ -1,0 +1,59 @@
+[Log de deploy de Render - el contenedor crashea al arrancar]
+==> Starting service...
+==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+==> Aplicando migraciones de base de datos (prisma migrate deploy)...
+node:fs:573
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/app/node_modules/.bin/prisma_schema_build_bg.wasm'
+    at Object.openSync (node:fs:573:18)
+    at Object.readFileSync (node:fs:452:35)
+    at /app/node_modules/.bin/prisma:49:9832
+    at /app/node_modules/.bin/prisma:2:263
+    at Object.<anonymous> (/app/node_modules/.bin/prisma:259:154)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/node_modules/.bin/prisma_schema_build_bg.wasm'
+}
+
+Node.js v20.20.2
+==> Exited with status 1
+==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+==> Aplicando migraciones de base de datos (prisma migrate deploy)...
+node:fs:573
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/app/node_modules/.bin/prisma_schema_build_bg.wasm'
+    at Object.openSync (node:fs:573:18)
+    at Object.readFileSync (node:fs:452:35)
+    at /app/node_modules/.bin/prisma:49:9832
+    at /app/node_modules/.bin/prisma:2:263
+    at Object.<anonymous> (/app/node_modules/.bin/prisma:259:154)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/node_modules/.bin/prisma_schema_build_bg.wasm'
+}
+
+Node.js v20.20.2
+
+[Panel de Render - version desplegada en ese momento]
+Web Service: novamarket
+Image: angelpenagarcia/novamarket:490992347f351da65a81ac9b93effb2ffab73f92
+URL: https://novamarket-zgv9.onrender.com
+Nota: esa no era la ultima imagen. La ultima publicada en Docker Hub en ese
+momento era angelpenagarcia/novamarket:8edeccc16cd6a3e4cdb6a79df2315545d08cf8a9
+- el servicio estaba corriendo una version vieja y atascada.

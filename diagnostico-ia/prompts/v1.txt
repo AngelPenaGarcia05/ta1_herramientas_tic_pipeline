@@ -1,0 +1,4 @@
+Analiza este log de CI/CD y explica que fallo y como solucionarlo.
+
+Log:
+__LOG_AQUI__

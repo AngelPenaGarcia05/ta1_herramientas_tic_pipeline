@@ -1,0 +1,26 @@
+{
+  "id": "caso_06_log_corto_sin_contexto",
+  "descripcion": "Log de solo 3 lineas, sin contexto suficiente para diagnosticar",
+  "esperado": {
+    "estado": "INDETERMINADO",
+    "etapa": "INDETERMINADO"
+  },
+  "version_prompt": "v1",
+  "error": null,
+  "intentos": 1,
+  "generado_localmente": false,
+  "fue_recortado_el_log": false,
+  "conteo_secretos": {},
+  "log_redactado": "Run started\nStep 4/12\nWaiting for runner...\n",
+  "respuesta_cruda": "## Análisis rápido del log\n\n| Línea del log | Qué indica |\n|---------------|------------|\n| `Run started` | El pipeline se ha disparado correctamente. |\n| `Step 4/12`   | El trabajo está en el paso 4 de 12. |\n| `Waiting for runner...` | El motor de CI está esperando a que **un runner** (agente de ejecución) se conecte para ejecutar ese paso. |\n\n### ¿Qué está fallando?\n\nEl pipeline se queda atascado en **“Waiting for runner…”**. Eso significa que, en el momento en que el job necesita un runner, **no hay ninguno disponible** que cumpla los requisitos del job. No es un error de compilación, pruebas o scripts; es un problema de infraestructura/ configuración del runner.\n\n---\n\n## Causas habituales\n\n| Posible causa | Descripción | Señales típicas |\n|---------------|-------------|-----------------|\n| **Runner offline** | El agente (self‑hosted o shared) está detenido o desconectado. | En la UI de CI aparecen “offline”, “inactive”, o “not connected”. |\n| **Etiquetas (tags) incompatibles** | El job está configurado con `tags:` que no coinciden con los tags del runner. | En la UI el runner tiene tags diferentes o ninguno. |\n| **Límite de concurrencia** | El runner está ocupado ejecutando otros jobs y su capacidad está al 100 %. | En la UI se ve “busy” o “max jobs reached”. |\n| **Restricciones de proyecto/branch** | El runner está limitado a ciertos proyectos, ramas o pipelines y el job no cumple. | En la configuración del runner aparecen `allowed_projects`, `protected` etc. |\n| **Problemas de registro** | El token de registro expiró o el runner no se registró correctamente. | En los logs del runner aparecen errores de autenticación. |\n| **Política de seguridad / permisos** | El token de acceso del pipeline no tiene permiso para usar el runner. | Mensajes de “permission denied” en logs más detallados. |\n| **Runner en modo “paused”** | En algunas plataformas (GitHub Actions, GitLab) se puede pausar un runner manualmente. | Estado “paused” en la UI. |\n\n---\n\n## Pasos de solución (orden recomendados)\n\n### 1. Verificar el estado del runner en la UI de tu CI/CD\n- **GitHub Actions** → *Settings → Actions → Runners*  \n- **GitLab CI** → *Admin Area → Runners* o *Project → Settings → CI/CD → Runners*  \n- **Azure Pipelines** → *Project settings → Agent pools*  \n- **CircleCI** → *Organization Settings → Self‑Hosted Runners*  \n\nBusca:\n- **Online/Idle** vs **Offline/Busy**.\n- **Etiquetas** asignadas al runner.\n- **Capacidad** (número máximo de jobs concurrentes).\n\n### 2. Confirmar que el job usa los tags correctos\nRevisa el archivo de definición del pipeline (por ejemplo `.github/workflows/*.yml`, `.gitlab-ci.yml`, `azure-pipelines.yml`, `config.yml` de CircleCI).\n\n```yaml\n# Ejemplo GitHub Actions\njobs:\n  build:\n    runs-on: [self-hosted, linux, my‑custom‑tag]   # <-- tags\n```\n\n- Si el runner tiene tags `linux, docker`, pero el job pide `macos`, nunca lo tomará.\n- **Solución:**  \n  - Añade los tags requeridos al runner, **o**  \n  - Modifica el job para que use los tags que realmente existen.\n\n### 3. Asegurarse de que el runner esté activo\n#### Self‑hosted\n- **Reinicia el servicio** (dependiendo del OS):\n  ```bash\n  # Linux (systemd)\n  sudo systemctl restart gitlab-runner   # GitLab\n  sudo systemctl restart actions.runner  # GitHub\n  ```\n- **Comprueba los logs",
+  "formato_valido": false,
+  "chequeos": [
+    {
+      "nombre": "json_valido",
+      "paso": false,
+      "detalle": "No es JSON valido: Expecting value: line 1 column 1 (char 0)"
+    }
+  ],
+  "datos": null,
+  "coincide_con_esperado": null
+}

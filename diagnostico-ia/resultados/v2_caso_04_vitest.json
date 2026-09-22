@@ -1,0 +1,90 @@
+{
+  "id": "caso_04_vitest",
+  "descripcion": "Fallo del paso Pruebas + cobertura (Vitest) en el job test-and-quality",
+  "esperado": {
+    "estado": "FALLO",
+    "etapa": "TEST"
+  },
+  "version_prompt": "v2",
+  "error": null,
+  "intentos": 1,
+  "generado_localmente": false,
+  "fue_recortado_el_log": true,
+  "conteo_secretos": {
+    "credencial_por_nombre": 1
+  },
+  "log_redactado": "2026-09-22T00:53:28.2860033Z Current runner version: '2.337.0'\n2026-09-22T00:53:28.2881607Z ##[group]Runner Image Provisioner\n2026-09-22T00:53:28.2882363Z Hosted Compute Agent\n2026-09-22T00:53:28.2882866Z Version: 20260828.587\n2026-09-22T00:53:28.2883424Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29\n2026-09-22T00:53:28.2884104Z Build Date: 2026-08-28T16:44:25Z\n2026-09-22T00:53:28.2884671Z Worker ID: {abdc115b-25b2-4190-9998-bf5a3679e289}\n2026-09-22T00:53:28.2885288Z Azure Region: westus3\n2026-09-22T00:53:28.2886075Z ##[endgroup]\n2026-09-22T00:53:28.2887262Z ##[group]Operating System\n2026-09-22T00:53:28.2887889Z Ubuntu\n2026-09-22T00:53:28.2888332Z 24.04.5\n2026-09-22T00:53:28.2888793Z LTS\n2026-09-22T00:53:28.2889245Z ##[endgroup]\n2026-09-22T00:53:28.2889743Z ##[group]Runner Image\n2026-09-22T00:53:28.2890289Z Image: ubuntu-24.04\n2026-09-22T00:53:28.2890762Z Version: 20260907.300.1\n2026-09-22T00:53:28.2891849Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md\n2026-09-22T00:53:28.2893139Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300\n2026-09-22T00:53:28.2894008Z ##[endgroup]\n2026-09-22T00:53:28.2894973Z ##[group]GITHUB_TOKEN Permissions\n2026-09-22T00:53:28.2896911Z Contents: read\n2026-09-22T00:53:28.2897444Z Metadata: read\n2026-09-22T00:53:28.2898243Z Packages: read\n2026-09-22T00:53:28.2898722Z ##[endgroup]\n2026-09-22T00:53:28.2900493Z Secret source: Actions\n2026-09-22T00:53:28.2901423Z Cache mode: write\n2026-09-22T00:53:28.2902158Z Prepare workflow directory\n2026-09-22T00:53:28.3210170Z Prepare all required actions\n2026-09-22T00:53:28.3254369Z Getting action download info\n2026-09-22T00:53:28.6268265Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)\n2026-09-22T00:53:28.7387627Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)\n2026-09-22T00:53:28.8727019Z Download action repository 'SonarSource/sonarqube-scan-action@v4' (SHA:689fb39b34b9aa95ebc5f8f119343ddd51542402)\n2026-09-22T00:53:29.2942508Z Getting action download info\n2026-09-22T00:53:29.4117274Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)\n2026-09-22T00:53:29.5733666Z Complete job name: Tests y SonarCloud\n2026-09-22T00:53:29.6484014Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\n2026-09-22T00:53:29.6492994Z ##[group]Run actions/checkout@v4\n2026-09-22T00:53:29.6493966Z with:\n2026-09-22T00:53:29.6494617Z   fetch-depth: 0\n2026-09-22T00:53:29.6495696Z   repository: AngelPenaGarcia05/ta1_herramientas_tic_pipeline\n2026-09-22T00:53:29.6502961Z   token: [REDACTADO:credencial_por_nombre]\n2026-09-22T00:53:29.6503620Z   ssh-strict: true\n2026-09-22T00:53:29.6504288Z   ssh-user: git\n2026-09-22T00:53:29.6505025Z   persist-credentials: true\n2026-09-22T00:53:29.6506115Z   clean: true\n2026-09-22T00:53:29.6506819Z   sparse-checkout-cone-mode: true\n2026-09-22T00:53:29.6507656Z   fetch-tags: false\n2026-09-22T00:53:29.6508345Z   show-progress: true\n2026-09-22T00:53:29.6509052Z   lfs: false\n2026-09-22T00:53:29.6509752Z   submodules: false\n2026-09-22T00:53:29.6510451Z   set-safe-directory: true\n2026-09-22T00:53:29.6511247Z   allow-unsafe-pr-checkout: false\n2026-09-22T00:53:29.6512271Z env:\n2026-09-22T00:53:29.6512892Z   IMAGE_NAME: novamarket\n2026-09-22T00:53:29.6513623Z ##[endgroup]\n2026-09-22T00:53:29.7372652Z Syncing repository: AngelPenaGarcia05/ta1_herramientas_tic_pipeline\n2026-09-22T00:53:29.7376554Z ##[group]Getting Git version info\n2026-09-22T00:53:29.7378773Z Working directory is '/home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline'\n2026-09-22T00:53:29.7381838Z [command]/usr/bin/git version\n2026-09-22T00:53:29.7419084Z git version 2.55.0\n2026-09-22T00:53:29.7438837Z ##[endgroup]\n2026-09-22T00:53:29.7452826Z Temporarily overriding HOME='/home/runner/work/_temp/ce210bb8-123d-4682-a2c0-d3a92bdb5317' before making global git config changes\n2026-09-22T00:53:29.7456487Z Adding repository directory to the temporary git global config as a safe directory\n2026-09-22T00:53:29.7459955Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline\n2026-09-22T00:53:29.7515479Z Deleting the contents of '/home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline'\n2026-09-22T00:53:29.7526422Z ##[group]Initializing the repository\n2026-09-22T00:53:29.7534585Z [command]/usr/bin/git init /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline\n2026-09-22T00:53:29.7652027Z hint: Using 'master' as the name for the initia\n\n[... LOG RECORTADO: se omitio la parte central por longitud ...]\n\n  RUN  v2.1.9 /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline\n2026-09-22T00:53:57.1009175Z       Coverage enabled with v8\n2026-09-22T00:53:57.1009358Z\n2026-09-22T00:53:57.3649394Z  ✓ tests/rbac.test.ts (7 tests) 4ms\n2026-09-22T00:53:57.3717149Z  ❯ tests/pricing.test.ts (16 tests | 1 failed) 15ms\n2026-09-22T00:53:57.3718262Z    × lineSubtotalCents > multiplica precio unitario por cantidad 10ms\n2026-09-22T00:53:57.3742678Z      → expected 5997 to be 999999 // Object.is equality\n2026-09-22T00:53:57.4010106Z  ✓ tests/validations.test.ts (7 tests) 6ms\n2026-09-22T00:53:57.6115185Z  ✓ tests/order-status.test.ts (5 tests) 4ms\n2026-09-22T00:53:57.7887602Z\n2026-09-22T00:53:57.7894805Z ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n2026-09-22T00:53:57.7895065Z\n2026-09-22T00:53:57.7897010Z FAIL tests/pricing.test.ts > lineSubtotalCents > multiplica precio unitario por cantidad\n2026-09-22T00:53:57.7914746Z AssertionError: expected 5997 to be 999999 // Object.is equality\n2026-09-22T00:53:57.7915177Z\n2026-09-22T00:53:57.7915353Z - Expected\n2026-09-22T00:53:57.7915784Z + Received\n2026-09-22T00:53:57.7915939Z\n2026-09-22T00:53:57.7916099Z - 999999\n2026-09-22T00:53:57.7916382Z + 5997\n2026-09-22T00:53:57.7916537Z\n2026-09-22T00:53:57.7916896Z  ❯ tests/pricing.test.ts:15:70\n2026-09-22T00:53:57.8046647Z     13| describe(\"lineSubtotalCents\", () => {\n2026-09-22T00:53:57.8047332Z     14|   it(\"multiplica precio unitario por cantidad\", () => {\n2026-09-22T00:53:57.8048245Z     15|     expect(lineSubtotalCents({ unitPriceCents: 1999, quantity: 3 })).t…\n2026-09-22T00:53:57.8048960Z        |                                                                     ^\n2026-09-22T00:53:57.8049361Z     16|   });\n2026-09-22T00:53:57.8049878Z     17|\n2026-09-22T00:53:57.8050182Z\n2026-09-22T00:53:57.8050705Z  Test Files  1 failed | 3 passed (4)\n2026-09-22T00:53:57.8051529Z       Tests  1 failed | 34 passed (35)\n2026-09-22T00:53:57.8052106Z    Start at  00:53:56\n2026-09-22T00:53:57.8052960Z    Duration  688ms (transform 109ms, setup 0ms, collect 214ms, tests 30ms, environment 1ms, prepare 304ms)\n2026-09-22T00:53:57.8053355Z\n2026-09-22T00:53:57.8054440Z ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n2026-09-22T00:53:57.8069921Z\n2026-09-22T00:53:57.8069948Z\n2026-09-22T00:53:57.8089049Z ##[error]AssertionError: expected 5997 to be 999999 // Object.is equality\n\n- Expected\n+ Received\n\n- 999999\n+ 5997\n\n ❯ tests/pricing.test.ts:15:70\n\n\n2026-09-22T00:53:57.8309757Z ##[error]Process completed with exit code 1.\n2026-09-22T00:53:57.8415825Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\n2026-09-22T00:53:57.8416776Z Post job cleanup.\n2026-09-22T00:53:57.9127076Z [command]/usr/bin/git version\n2026-09-22T00:53:57.9165024Z git version 2.55.0\n2026-09-22T00:53:57.9196950Z Temporarily overriding HOME='/home/runner/work/_temp/9fcb3218-6d27-4e1b-a276-1adb9cf576be' before making global git config changes\n2026-09-22T00:53:57.9198375Z Adding repository directory to the temporary git global config as a safe directory\n2026-09-22T00:53:57.9201404Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ta1_herramientas_tic_pipeline/ta1_herramientas_tic_pipeline\n2026-09-22T00:53:57.9238508Z [command]/usr/bin/git config --local --name-only --get-regexp core\\.sshCommand\n2026-09-22T00:53:57.9271534Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'core\\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\"\n2026-09-22T00:53:57.9502089Z [command]/usr/bin/git config --local --name-only --get-regexp http\\.https\\:\\/\\/github\\.com\\/\\.extraheader\n2026-09-22T00:53:57.9518205Z http.https://github.com/.extraheader\n2026-09-22T00:53:57.9527355Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader\n2026-09-22T00:53:57.9556982Z [command]/usr/bin/git submodule foreach --recursive sh -c \"git config --local --name-only --get-regexp 'http\\.https\\:\\/\\/github\\.com\\/\\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\"\n2026-09-22T00:53:57.9784962Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\\.gitdir:\n2026-09-22T00:53:57.9821756Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url\n2026-09-22T00:53:58.0177635Z Cleaning up orphan processes\n2026-09-22T00:53:58.0417102Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\n",
+  "respuesta_cruda": "{\n  \"estado\": \"FALLO\",\n  \"etapa\": \"TEST\",\n  \"categoria_causa\": \"CODIGO\",\n  \"causa_probable\": \"La función lineSubtotalCents devuelve 5997 en lugar de 999999, provocando que la prueba pricing.test.ts falle.\",\n  \"evidencia\": [\n    \"FAIL tests/pricing.test.ts > lineSubtotalCents > multiplica precio unitario por cantidad\",\n    \"AssertionError: expected 5997 to be 999999 // Object.is equality\",\n    \"##[error]Process completed with exit code 1.\"\n  ],\n  \"severidad\": \"ALTA\",\n  \"acciones_sugeridas\": [\n    \"Revisar la implementación de lineSubtotalCents y corregir la fórmula de cálculo.\",\n    \"Actualizar el test o los datos de entrada si el valor esperado es incorrecto.\",\n    \"Ejecutar localmente npm run test para confirmar que la prueba pasa.\",\n    \"Commitar los cambios y volver a ejecutar el pipeline.\",\n    \"Verificar que el resto de pruebas siguen pasando después de la corrección.\"\n  ],\n  \"reintento_seguro\": true,\n  \"confianza\": \"ALTA\",\n  \"informacion_faltante\": [],\n  \"fuera_de_alcance\": false\n}",
+  "formato_valido": true,
+  "chequeos": [
+    {
+      "nombre": "json_valido",
+      "paso": true,
+      "detalle": "El texto es un objeto JSON valido"
+    },
+    {
+      "nombre": "campos_completos",
+      "paso": true,
+      "detalle": "Todos los campos presentes"
+    },
+    {
+      "nombre": "tipos_correctos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "enums_validos",
+      "paso": true,
+      "detalle": "OK"
+    },
+    {
+      "nombre": "coherencia_sin_fallo",
+      "paso": true,
+      "detalle": "No aplica (estado != SIN_FALLO)"
+    },
+    {
+      "nombre": "coherencia_indeterminado",
+      "paso": true,
+      "detalle": "No aplica (estado != INDETERMINADO)"
+    },
+    {
+      "nombre": "evidencia_literal",
+      "paso": true,
+      "detalle": "Toda la evidencia aparece en el log"
+    },
+    {
+      "nombre": "sin_acciones_prohibidas",
+      "paso": true,
+      "detalle": "Ninguna accion prohibida"
+    },
+    {
+      "nombre": "sin_secretos_en_la_respuesta",
+      "paso": true,
+      "detalle": "OK"
+    }
+  ],
+  "datos": {
+    "estado": "FALLO",
+    "etapa": "TEST",
+    "categoria_causa": "CODIGO",
+    "causa_probable": "La función lineSubtotalCents devuelve 5997 en lugar de 999999, provocando que la prueba pricing.test.ts falle.",
+    "evidencia": [
+      "FAIL tests/pricing.test.ts > lineSubtotalCents > multiplica precio unitario por cantidad",
+      "AssertionError: expected 5997 to be 999999 // Object.is equality",
+      "##[error]Process completed with exit code 1."
+    ],
+    "severidad": "ALTA",
+    "acciones_sugeridas": [
+      "Revisar la implementación de lineSubtotalCents y corregir la fórmula de cálculo.",
+      "Actualizar el test o los datos de entrada si el valor esperado es incorrecto.",
+      "Ejecutar localmente npm run test para confirmar que la prueba pasa.",
+      "Commitar los cambios y volver a ejecutar el pipeline.",
+      "Verificar que el resto de pruebas siguen pasando después de la corrección."
+    ],
+    "reintento_seguro": true,
+    "confianza": "ALTA",
+    "informacion_faltante": [],
+    "fuera_de_alcance": false
+  },
+  "coincide_con_esperado": true
+}
